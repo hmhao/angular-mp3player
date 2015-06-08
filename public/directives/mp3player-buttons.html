@@ -1,0 +1,18 @@
+<div class="player-buttons" ng-controller="Mp3playerButtonsCtrl">
+    <button class="prev" ng-click="prev()" ng-class="{pressed:buttons.prev}">
+        <span class="glyphicon glyphicon-backward"></span>
+    </button>
+    <button class="play" ng-click="play()" ng-class="{pressed:buttons.play}">
+        <span class="glyphicon glyphicon-play"></span>
+    </button>
+    <button class="pause" ng-click="pause()" ng-class="{pressed:buttons.pause}">
+        <span class="glyphicon glyphicon-pause"></span>
+    </button>
+    <button class="stop" ng-click="stop()" ng-class="{pressed:buttons.stop}">
+        <span class="glyphicon glyphicon-stop"></span>
+    </button>
+    <button class="next" ng-click="next()" ng-class="{pressed:buttons.next}">
+        <span class="glyphicon glyphicon-forward"></span>
+    </button>
+    <div class="clear"></div>
+</div>

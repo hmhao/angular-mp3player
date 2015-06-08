@@ -1,0 +1,11 @@
+<div class="tracks">
+    <ul class="tracklist">
+        <li ng-repeat="track in tracks" data-id="{{track.id}}" ng-class="{selected:track.id==trackCurrent}">
+            {{track.artist}} - {{track.title | titleLength}}
+            <span class="pull-right">
+                <span ng-show="track.loaded">{{track.duration | formatTime}}</span>
+                <img src="/images/loading.gif" ng-hide="track.loaded" />
+            </span>
+        </li>
+    </ul>
+</div>

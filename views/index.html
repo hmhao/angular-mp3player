@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/libs/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <link rel='stylesheet' href='/stylesheets/index.css'/>
+</head>
+<body>
+<header><%= title %></header>
+
+<div id="mp3player" class="container" ng-app="angular-mp3player">
+    <mp3player></mp3player>
+</div>
+
+<!-- bower:js -->
+<script src="/libs/jquery/dist/jquery.js"></script>
+<script src="/libs/angular/angular.js"></script>
+<script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
+<!-- endbower -->
+<script src="/javascripts/mp3Player.js"></script>
+<script src="/javascripts/mp3Player.controllers.js"></script>
+<script src="/javascripts/mp3Player.directives.js"></script>
+<script src="/javascripts/mp3Player.services.js"></script>
+<script src="/javascripts/mp3Player.filters.js"></script>
+<script src="/javascripts/slider.js"></script>
+<script>
+    /***** Resize Event *****/
+    function stretchBody () {
+        $("body").height($(window).height());
+    }
+    setTimeout(stretchBody(),1000);
+
+    $(window).resize(stretchBody);
+</script>
+</body>
+</html>

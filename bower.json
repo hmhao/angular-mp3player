@@ -1,0 +1,13 @@
+{
+    "name": "angular-mp3player",
+    "version": "0.0.0",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "angular": "^1.3.0",
+        "bootstrap": "^3.3.0"
+    }
+}

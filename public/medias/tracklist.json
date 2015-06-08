@@ -1,0 +1,47 @@
+{
+    "tracks": [
+        {
+            "url": "medias/古典音乐-1号圆舞曲.mp3",
+            "title": "古典音乐-1号圆舞曲",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        },
+        {
+            "url": "medias/古典音乐-2号即兴曲.mp3",
+            "title": "古典音乐-2号即兴曲",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        },
+        {
+            "url": "medias/古典音乐-匈牙利狂想曲.mp3",
+            "title": "古典音乐-匈牙利狂想曲",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        },
+        {
+            "url": "medias/古典音乐-十面埋伏(琵琶曲).mp3",
+            "title": "古典音乐-十面埋伏(琵琶曲)",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        },
+        {
+            "url": "medias/古典音乐-献给爱丽丝.mp3",
+            "title": "古典音乐-献给爱丽丝",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        },
+        {
+            "url": "medias/古典音乐-钢琴幻想曲.mp3",
+            "title": "古典音乐-钢琴幻想曲",
+            "artist": "纯音乐",
+            "genre": "古典",
+            "album": "古典音乐"
+        }
+
+    ]
+}
