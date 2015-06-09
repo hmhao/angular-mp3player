@@ -119,7 +119,7 @@ var components = (function (window) {
         }
         this.thumb.addClass('down');
         var that = this;
-
+        that.isDragged = true;
         $(document)
             .on('mousemove.startDrag', function (e) { // namespace, damit muss ich nicht den Handler mitgeben; wichtig, wenn ich den Handler an ein Objekt binde
                 that.isDragged = true;
@@ -133,6 +133,7 @@ var components = (function (window) {
             $(document).off('mousemove.startDrag');
 //          $(document).off('mouseup.startDrag');
             that.thumb.removeClass('down');
+            $(this).trigger('mouseup');
         }.bind(this));
         e.preventDefault(); // prevent selecting text, etc.
     };

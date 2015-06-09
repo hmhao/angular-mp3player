@@ -27,19 +27,29 @@ app.controller('Mp3playerDisplayCtrl', ['$scope', 'Display', function ($scope, D
     $scope.Genre = Display.genre;
 }]);
 
-app.controller('Mp3playerTimeCtrl', ['$scope', 'Player', function ($scope, Player) {
+app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function ($scope, $interval, Player) {
+    var promise = {
+        id: null,
+        process: function process(){
+            if($scope.isDragged) return;
+            if(++$scope.currTime >= $scope.totalTime){
+                $scope.currTime = $scope.totalTime;
+            }
+        }
+    };
+    $scope.isDragged = false;
     $scope.currTime = 0;
     $scope.totalTime = 0;
-    $scope.$watch('trackCurrent', function(value) {
-        if(value != -1){
-            $scope.totalTime = $scope.tracks[value].duration;
+    $scope.$watch(function(){
+        return Player.playing();
+    }, function(value) {
+        if(value){
+            $scope.totalTime = $scope.tracks[$scope.trackCurrent].duration;
+            promise.id = $interval(promise.process, 1000);
+        }else{
+            $interval.cancel(promise.id);
         }
     });
-    /*$scope.$watch(function(){
-        return Player.currentTime();
-    }, function(value) {
-        $scope.currTime = value;
-    });*/
 }]);
 
 app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function ($scope, Display, Player) {
@@ -81,14 +91,14 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
         }
     };
 
-    $scope.play = function() {
+    $scope.play = function(time) {
         $scope.log('play');
         disableAllButtons();
         $scope.buttons.play = true;
         if($scope.trackCurrent != -1){
             Player.stop();
             addWatch('tracks['+ $scope.trackCurrent + '].loaded',function(){
-                Player.play($scope.trackCurrent);
+                Player.play($scope.trackCurrent, time);
                 Player.onended = function(){
                     console.log('onEnd');
                 };
@@ -132,4 +142,11 @@ app.controller('Mp3playerVolumeCtrl', ['$scope', 'Player', function ($scope, Pla
     $scope.$watch('volume', function(value) {
         Player.changeVolume(value);
     });
+}]);
+
+app.controller('Mp3playerVisualizeCtrl', ['$scope', 'Player', function ($scope, Player) {
+    $scope.size = Player.size;
+    $scope.visualize = function(visualizer){
+        Player.visualizer = visualizer;
+    };
 }]);
