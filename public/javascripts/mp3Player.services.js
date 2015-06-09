@@ -56,7 +56,7 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
     _analyser.connect(_gainNode);
 
     return {
-        size: 128,//unit8Array的长度
+        size: 128,//frequency,unit8Array的长度
         current: function(){
             return _currentID;
         },
@@ -98,7 +98,7 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
             var v = function(){
                 _analyser.getByteFrequencyData(arr);
                 //将分析得到的音频数据传递给mv.visualizer方法可视化
-                _this.visualizer(arr);
+                _playing && _this.visualizer(arr);
                 requestAnimationFrame(v);
             };
             requestAnimationFrame(v);

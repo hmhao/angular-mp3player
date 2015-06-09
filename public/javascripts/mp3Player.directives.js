@@ -139,37 +139,9 @@ app.directive('mp3playerVisualize', function() {
         templateUrl: '/directives/mp3player-visualize.html',
         replace: true,
         link: function(scope, element, attrs) {
-            var canvas = $('#canvas');
-            var ctx = canvas[0].getContext('2d');
-            var cWidth = canvas.width();
-            var cHeight = canvas.height() * 2;
-            //创建线性渐变对象，以便绘制柱状图使用
-            var line = ctx.createLinearGradient(0, 0, 0, cHeight);
-            line.addColorStop(0, 'red');
-            line.addColorStop(0.5, 'yellow');
-            line.addColorStop(1, 'green');
-            ctx.fillStyle = line;
-            //console.log(cWidth,cHeight);
-
-            var renderColumn = function(arr){
-                ctx.clearRect(0,0,cWidth,cHeight);
-                var w = cWidth / scope.size;
-                for(var i = 0, h; i < scope.size; i++){
-                    h = arr[i] / 256 * cHeight;
-                    ctx.fillRect(w * i, cHeight - h, w * 0.6, h);
-                }
-            };
-
-            var renderDot = function(arr){
-                ctx.clearRect(0,0,cWidth,cHeight);
-                var w = cWidth / scope.size;
-                for(var i = 0, r; i < scope.size; i++){
-                    r = arr[i] / 256 * 50;
-
-                }
-            };
-
-            scope.visualize(renderColumn);
+            var canvas = $('#canvas')[0];
+                visualizer = new Visualizer(canvas);
+            scope.visualize(visualizer.renderDot);
         }
     }
 });
