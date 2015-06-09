@@ -65,7 +65,14 @@ app.directive('mp3playerButtons', function() {
         templateUrl: '/directives/mp3player-buttons.html',
         replace: true,
         link: function(scope, element, attrs) {
-
+            element.delegate('button', 'click', function(){
+                var button = $(this);
+                var func = button.attr('name');
+                if(!button.hasClass('pressed')){
+                    scope[func] && scope[func]();
+                    scope.$apply();
+                }
+            });
         }
     }
 });
@@ -115,10 +122,10 @@ app.directive('mp3playerTracks', function() {
         templateUrl: '/directives/mp3player-tracks.html',
         replace: true,
         link: function(scope, element, attrs) {
-            element.delegate('ul li', 'click',function(){
+            element.delegate('ul li', 'click', function(){
                 if(scope.trackCurrent != $(this).data('id')){
                     scope.trackCurrent = $(this).data('id');
-                    scope.play();
+                    scope.play(0);
                     scope.$apply();
                 }
             });

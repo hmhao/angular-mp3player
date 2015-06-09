@@ -86,19 +86,23 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
             $scope.buttons.prev = true;
             if($scope.trackCurrent != Math.max(0,$scope.trackCurrent-1)){
                 $scope.trackCurrent--;
-                $scope.play();
+                $scope.play(0);
             }
         }
     };
 
     $scope.play = function(time) {
-        $scope.log('play');
-        disableAllButtons();
-        $scope.buttons.play = true;
+        if(time === undefined){
+            time = $scope.currTime || 0;
+        }
         if($scope.trackCurrent != -1){
+            $scope.log('play');
+            disableAllButtons();
+            $scope.buttons.play = true;
             Player.stop();
+            $scope.currTime = time;
             addWatch('tracks['+ $scope.trackCurrent + '].loaded',function(){
-                Player.play($scope.trackCurrent, time);
+                Player.play($scope.trackCurrent, $scope.currTime);
                 Player.onended = function(){
                     console.log('onEnd');
                 };
@@ -112,6 +116,7 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
             return;
         disableAllButtons();
         $scope.buttons.pause = true;
+        Player.stop();
     };
 
     $scope.stop = function() {
@@ -120,6 +125,8 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
             return;
         disableAllButtons();
         $scope.buttons.stop = true;
+        Player.stop();
+        $scope.currTime = 0;
     };
 
     $scope.next = function() {
@@ -129,7 +136,7 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
             $scope.buttons.next = true;
             if($scope.trackCurrent != Math.min($scope.tracks.length-1,$scope.trackCurrent+1)){
                 $scope.trackCurrent++;
-                $scope.play();
+                $scope.play(0);
             }
         }
     }
