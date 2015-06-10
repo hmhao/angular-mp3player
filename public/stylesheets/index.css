@@ -120,6 +120,54 @@ input, input:focus, button, button:focus{
     float:left;
 }
 
+/**add*/
+.mp3player .add-button{
+    float: left;
+    position: relative;
+    margin-right: 8px;
+}
+.mp3player .add-button > button {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border:1px solid black;
+
+    width:30px;
+    height:30px;
+    padding-left: 8px;
+    float:left;
+    color:#aaa;
+
+    background: #4c4c4c; /* Old browsers */
+    background: -moz-linear-gradient(top, #4c4c4c 0%, #595959 12%, #666666 25%, #474747 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #2b2b2b 76%, #1c1c1c 91%, #131313 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4c4c4c), color-stop(12%,#595959), color-stop(25%,#666666), color-stop(39%,#474747), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#2b2b2b), color-stop(91%,#1c1c1c), color-stop(100%,#131313)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 52%,#000000 53%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 53%,#000000 54%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+}
+.mp3player .add-button > button:hover {
+    color:#E0981B;
+    background: #3f3f3f; /* Old browsers */
+    background: -moz-linear-gradient(top, #3f3f3f 0%, #444444 12%, #5e5e5e 25%, #3d3d3d 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #212121 76%, #161616 91%, #131313 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3f3f3f), color-stop(12%,#444444), color-stop(25%,#5e5e5e), color-stop(39%,#3d3d3d), color-stop(50%,#2c2c2c), color-stop(51%,#000000), color-stop(60%,#111111), color-stop(76%,#212121), color-stop(91%,#161616), color-stop(100%,#131313)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #3f3f3f 0%,#444444 12%,#5e5e5e 25%,#3d3d3d 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#212121 76%,#161616 91%,#131313 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #3f3f3f 0%,#444444 12%,#5e5e5e 25%,#3d3d3d 39%,#2c2c2c 50%,#000000 51%,#111111 60%,#212121 76%,#161616 91%,#131313 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #3f3f3f 0%,#444444 12%,#5e5e5e 25%,#3d3d3d 39%,#2c2c2c 53%,#000000 54%,#111111 60%,#212121 76%,#161616 91%,#131313 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #3f3f3f 0%,#444444 12%,#5e5e5e 25%,#3d3d3d 39%,#2c2c2c 53%,#000000 54%,#111111 60%,#212121 76%,#161616 91%,#131313 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3f3f3f', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
+}
+.mp3player .add-button > button input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    opacity: 0; /* 实现的关键点 */
+    filter:alpha(opacity=0);/* 兼容IE */
+}
+
 /**slider*/
 .mp3player .slidercontainer {
     height:10px;
@@ -130,7 +178,7 @@ input, input:focus, button, button:focus{
 .mp3player .volume {
     float: right;
 }
-.mp3player .volume > button{
+.mp3player .volume > button {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -150,7 +198,7 @@ input, input:focus, button, button:focus{
     background: linear-gradient(to bottom, #4c4c4c 0%,#595959 12%,#666666 25%,#474747 39%,#2c2c2c 53%,#000000 54%,#111111 60%,#2b2b2b 76%,#1c1c1c 91%,#131313 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313',GradientType=0 ); /* IE6-9 */
 }
-.mp3player .volume > button:hover{
+.mp3player .volume > button:hover {
     color:#E0981B;
     background: #3f3f3f; /* Old browsers */
     background: -moz-linear-gradient(top, #3f3f3f 0%, #444444 12%, #5e5e5e 25%, #3d3d3d 39%, #2c2c2c 50%, #000000 51%, #111111 60%, #212121 76%, #161616 91%, #131313 100%); /* FF3.6+ */

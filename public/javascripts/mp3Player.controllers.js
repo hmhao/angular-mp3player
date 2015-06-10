@@ -40,7 +40,7 @@ app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function (
     var promise = {
         id: null,
         process: function process(){//更新当前播放时间
-            if($scope.isDragged) return;//用户操作时间轴时不需要更新
+            if($scope.isDragged || !Player.playing()) return;//用户操作时间轴时不需要更新
             if(++$scope.currTime >= $scope.totalTime){
                 $scope.currTime = $scope.totalTime;
             }
@@ -59,6 +59,23 @@ app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function (
             $interval.cancel(promise.id);
         }
     });
+}]);
+
+app.controller('Mp3playerAddCtrl', ['$scope', 'Player', function ($scope, Player) {
+    $scope.addLocalAudio = function(opts){
+        var track = {
+            id: $scope.tracks.length,
+            artist: 'local',
+            title: opts.title,
+            album: 'local',
+            genre: 'local',
+            url: '',
+            loaded: false,
+            duration: ''
+        };
+        $scope.tracks.push(track);
+        Player.add(track, opts.data);
+    }
 }]);
 
 app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Player) {
@@ -114,6 +131,7 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Pl
                 Player.play($scope.trackCurrent, $scope.currTime);
                 Player.onended = function(){
                     console.log('onEnd');
+                    $scope.stop();
                 };
             });
         }

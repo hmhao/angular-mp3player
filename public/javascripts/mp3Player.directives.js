@@ -68,6 +68,27 @@ app.directive('mp3playerTime', function() {
     }
 });
 
+app.directive('mp3playerAdd', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/directives/mp3player-add.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+            element.find('#upload').on('change', function(e){
+                var file = this.files[0];
+                var fr = new FileReader();
+                fr.onload = function(e){
+                    scope.addLocalAudio({
+                        title: file.name.substr(0, file.name.lastIndexOf('.')),
+                        data: e.target.result
+                    });
+                };
+                fr.readAsArrayBuffer(file);
+            });
+        }
+    }
+});
+
 app.directive('mp3playerButtons', function() {
     return {
         restrict: 'E',
@@ -150,7 +171,7 @@ app.directive('mp3playerVisualize', function() {
         link: function(scope, element, attrs) {
             var canvas = $('#canvas')[0],
                 visualizer = new Visualizer(canvas),
-                vQueue = [visualizer.renderColumn,visualizer.renderDot],
+                vQueue = [visualizer.renderLine,visualizer.renderColumn,visualizer.renderDot],
                 index = 0;
 
             element.on('click', function(){

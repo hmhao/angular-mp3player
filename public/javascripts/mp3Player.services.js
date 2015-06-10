@@ -90,6 +90,15 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
             };
             requestAnimationFrame(v);
         },
+        add: function(track, data){
+            if(!data) return;
+            _ctx.decodeAudioData(data, function(buffer) {//解码音频数据
+                _trackBuffer[track.id] = buffer;//存储解码后的音频数据
+                track.loaded = true;
+                track.duration = buffer.duration;
+                $rootScope.$apply();
+            }, function(err) {console.log('ERROR DECODING AUDIO');});
+        },
         play:function(id, time){
             _currentID = id;
             time = time || 0;

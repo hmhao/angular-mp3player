@@ -89,5 +89,27 @@
             self.ctx.fill();
         }
     };
+    /**线条渲染*/
+    Visualizer.prototype.renderLine = function(arr){
+        self.ctx.strokeStyle = "#00d0ff";
+        self.ctx.clearRect(0,0,self.width,self.height);
+        var step = Math.round(arr.length / 60), //采样步长
+            w = 20,
+            gap = 2;
+        for (var i = 0, energy; i < SIZE; i++) {
+            energy = Math.round((arr[step * i] / 256) * 50);
+            for (var j = 0; j < energy; j++) {
+                self.ctx.beginPath();
+                self.ctx.moveTo(w * i + gap, 200 + 4 * j);
+                self.ctx.lineTo(w * (i + 1) - gap, 200 + 4 * j);
+                self.ctx.stroke();
+                self.ctx.beginPath();
+                self.ctx.moveTo(w * i + gap, 200 - 4 * j);
+                self.ctx.lineTo(w * (i + 1) - gap, 200 - 4 * j);
+                self.ctx.stroke();
+            }
+        }
+    };
+
     window.Visualizer = Visualizer;
 })(window);
