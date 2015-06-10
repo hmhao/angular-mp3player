@@ -1,4 +1,4 @@
-!function(){
+!(function(window){
     var GDATA = [],//该数组保存canvas中各图形的x,y坐标以及他们的颜色
         SIZE = 64,//音乐片段数
         self;
@@ -46,28 +46,28 @@
             });
         }
     };
-
+    /**柱状渲染*/
     Visualizer.prototype.renderColumn = function(arr){
         self.ctx.fillStyle = GDATA.linearGradient;
         self.ctx.clearRect(0,0,self.width,self.height);
-        var w = self.width / SIZE,
-            cgap = Math.round(w * 0.3);
-            cw = w - cgap;
+        var w = self.width / SIZE,//柱状总宽
+            cgap = Math.round(w * 0.3);//柱状间距
+            cw = w - cgap;//柱状实际宽
         for(var i = 0, g, h; i < SIZE; i++){
             g = GDATA[i];
-            h = arr[i] / 256 * self.height;
-            g.cheight > cw && (g.cheight = cw);
-            if(--g.cap < g.cheight){
+            h = arr[i] / 256 * self.height;//柱状总高
+            g.cheight > cw && (g.cheight = cw);//柱状顶部小块的高不超过其宽
+            if(--g.cap < g.cheight){//柱状顶部小块下落到最低点后不再减少
                 g.cap = g.cheight;
             }
-            if(h > 0 && (g.cap < h + 20)){
+            if(h > 0 && (g.cap < h + 20)){//柱状顶部小块不超过最高点
                 g.cap = h + 20 > self.height ? self.height : h + 20;
             }
-            self.ctx.fillRect(w * i, self.height - g.cap, cw, g.cheight);
-            self.ctx.fillRect(w * i, self.height - h, cw, h);
+            self.ctx.fillRect(w * i, self.height - g.cap, cw, g.cheight);//绘制柱状
+            self.ctx.fillRect(w * i, self.height - h, cw, h);//绘制柱状顶部小块
         }
     };
-
+    /**圆点渲染*/
     Visualizer.prototype.renderDot = function(arr){
         self.ctx.fillStyle = GDATA.linearGradient;
         self.ctx.clearRect(0,0,self.width,self.height);
@@ -75,9 +75,9 @@
             g = GDATA[i];
             var x = g.x,
                 y = g.y,
-                r = Math.round((arr[i] / 5 + 10) * self.width / 800);
-            g.x += g.dx;
-            g.x > (self.width + r) && (g.x = -r);
+                r = Math.round((arr[i] / 5 + 10) * self.width / 800);//半径
+            g.x += g.dx;//向右移动
+            g.x > (self.width + r) && (g.x = -r);//超出右侧则返回到左侧
 
             var gradient = self.ctx.createRadialGradient(x, y, 0, x, y, r);
             gradient.addColorStop(0, 'white');
@@ -85,13 +85,9 @@
             self.ctx.fillStyle = gradient;
             //开始路径，绘画圆
             self.ctx.beginPath();
-            self.ctx.arc(x, y, r, 0, Math.PI * 2, true);
+            self.ctx.arc(x, y, r, 0, Math.PI * 2, true);//绘制圆点
             self.ctx.fill();
         }
     };
-
-    Visualizer.prototype.setDotMode = function(){
-
-    };
     window.Visualizer = Visualizer;
-}();
+})(window);

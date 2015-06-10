@@ -21,26 +21,35 @@ app.controller('Mp3playerCtrl', ['$rootScope', '$scope', 'Track', 'Player', func
     });
 }]);
 
-app.controller('Mp3playerDisplayCtrl', ['$scope', 'Display', function ($scope, Display) {
-    $scope.Display = Display.text;
-    $scope.Album = Display.album;
-    $scope.Genre = Display.genre;
+app.controller('Mp3playerDisplayCtrl', ['$scope', function ($scope) {
+    $scope.Display = 'text';
+    $scope.Album = 'album';
+    $scope.Genre = 'genre';
+
+    $scope.$watch('trackCurrent', function(value) {
+        if (value != -1){
+            var track = $scope.tracks[value];
+            $scope.Display = track.title;
+            $scope.Album = track.album;
+            $scope.Genre = track.genre;
+        }
+    });
 }]);
 
 app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function ($scope, $interval, Player) {
     var promise = {
         id: null,
-        process: function process(){
-            if($scope.isDragged) return;
+        process: function process(){//更新当前播放时间
+            if($scope.isDragged) return;//用户操作时间轴时不需要更新
             if(++$scope.currTime >= $scope.totalTime){
                 $scope.currTime = $scope.totalTime;
             }
         }
     };
-    $scope.isDragged = false;
-    $scope.currTime = 0;
-    $scope.totalTime = 0;
-    $scope.$watch(function(){
+    $scope.isDragged = false;//是否操作时间轴
+    $scope.currTime = 0;//当前播放时间
+    $scope.totalTime = 0;//总时长
+    $scope.$watch(function(){//监听播放开始
         return Player.playing();
     }, function(value) {
         if(value){
@@ -52,7 +61,7 @@ app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function (
     });
 }]);
 
-app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function ($scope, Display, Player) {
+app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Player) {
     /*按钮点击状态*/
     $scope.buttons = {
         prev: false,
@@ -69,7 +78,7 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Display', 'Player', function 
     }
 
     var watch;
-    function addWatch(watchExp, callback){
+    function addWatch(watchExp, callback){//监听表达式的一次变化
         if(watch) watch();// clear the watch
         watch = $scope.$watch(watchExp, function (value) {
             if(value){
