@@ -192,3 +192,14 @@ app.directive('mp3playerVisualize', function() {
         }
     }
 });
+
+app.directive('mp3playerLyrics', function() {
+    return {
+        restrict: 'E',
+        templateUrl: '/directives/mp3player-lyrics.html',
+        replace: true,
+        link: function(scope, element, attrs) {
+
+        }
+    }
+});

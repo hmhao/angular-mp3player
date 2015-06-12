@@ -183,4 +183,8 @@ app.controller('Mp3playerVisualizeCtrl', ['$scope', 'Player', function ($scope, 
     $scope.visualize = function(visualizer){
         Player.visualizer = visualizer;
     };
+
+}]);
+
+app.controller('Mp3playerLyricsCtrl', ['$scope', function ($scope) {
 }]);
