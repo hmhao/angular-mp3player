@@ -171,7 +171,17 @@ app.directive('mp3playerVisualize', function() {
         link: function(scope, element, attrs) {
             var canvas = $('#canvas')[0],
                 visualizer = new Visualizer(canvas),
-                vQueue = [visualizer.renderLine,visualizer.renderColumn,visualizer.renderDot],
+                vQueue = [
+                    visualizer.renderStripblock,
+                    visualizer.renderOhter3,
+                    visualizer.renderOhter2,
+                    visualizer.renderOhter1,
+                    visualizer.renderEqual,
+                    visualizer.renderSinewave,
+                    visualizer.renderLine,
+                    visualizer.renderColumn,
+                    visualizer.renderDot
+                ],
                 index = 0;
 
             element.on('click', function(){
