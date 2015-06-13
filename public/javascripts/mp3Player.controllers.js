@@ -183,8 +183,13 @@ app.controller('Mp3playerVisualizeCtrl', ['$scope', 'Player', function ($scope, 
     $scope.visualize = function(visualizer){
         Player.visualizer = visualizer;
     };
-
 }]);
 
-app.controller('Mp3playerLyricsCtrl', ['$scope', function ($scope) {
+app.controller('Mp3playerLyricsCtrl', ['$scope', 'Lyrics', function ($scope, Lyrics) {
+    $scope.getLrc = function(id, callback){
+        id = id || '';
+        Lyrics.get(id, function(data){
+            callback(data);
+        });
+    }
 }]);

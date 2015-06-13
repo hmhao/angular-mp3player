@@ -199,7 +199,10 @@ app.directive('mp3playerLyrics', function() {
         templateUrl: '/directives/mp3player-lyrics.html',
         replace: true,
         link: function(scope, element, attrs) {
-
+            var lrc = new Lrc({el:element});
+            scope.getLrc('', function(data){
+                lrc.create(data);
+            });
         }
     }
 });

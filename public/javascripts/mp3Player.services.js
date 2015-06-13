@@ -137,3 +137,23 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
         }
     }
 }]);
+
+app.service('Lyrics', ['$http', function ($http) {
+    var cachedData = {};
+    return {
+        get: function(id, callback) {
+            if (cachedData[id]) {
+                callback(cachedData[id]);
+            } else {
+                $http.get('/lrcs/abc.lrc', {
+                    transformResponse : function(data, headersGetter, status){
+                        return data;
+                    }
+                }).success(function(data){
+                    cachedData[id] = data;
+                    callback(data);
+                });
+            }
+        }
+    };
+}]);
