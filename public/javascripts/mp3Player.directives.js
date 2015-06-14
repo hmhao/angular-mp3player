@@ -202,6 +202,11 @@ app.directive('mp3playerLyrics', function() {
             var lrc = new Lrc({el:element});
             scope.getLrc('', function(data){
                 lrc.create(data);
+                scope.$watch('currTime', function(newVal, oldVal) {//监听时间模型以更新时间轴滑动条
+                    if(newVal != oldVal){//更新视图
+                        lrc.scrollTo(newVal * 1000);
+                    }
+                });
             });
         }
     }

@@ -52,9 +52,9 @@
                 if (!timeout) context = args = null;
             };
             return function() {
-                var now = now();
-                if (!previous && options.leading === false) previous = now;
-                var remaining = wait - (now - previous);
+                var _now = now();
+                if (!previous && options.leading === false) previous = _now;
+                var remaining = wait - (_now - previous);
                 context = this;
                 args = arguments;
                 if (remaining <= 0 || remaining > wait) {
@@ -62,40 +62,11 @@
                         clearTimeout(timeout);
                         timeout = null;
                     }
-                    previous = now;
+                    previous = _now;
                     result = func.apply(context, args);
                     if (!timeout) context = args = null;
                 } else if (!timeout && options.trailing !== false) {
                     timeout = setTimeout(later, remaining);
-                }
-                return result;
-            };
-        },
-        debounce = function(func, wait, immediate) {
-            var timeout, args, context, timestamp, result;
-
-            var later = function() {
-                var last = now() - timestamp;
-
-                if (last < wait && last >= 0) {
-                    timeout = setTimeout(later, wait - last);
-                } else {
-                    timeout = null;
-                    if (!immediate) {
-                        result = func.apply(context, args);
-                        if (!timeout) context = args = null;
-                    }
-                }
-            };
-            return function() {
-                context = this;
-                args = arguments;
-                timestamp = now();
-                var callNow = immediate && !timeout;
-                if (!timeout) timeout = setTimeout(later, wait);
-                if (callNow) {
-                    result = func.apply(context, args);
-                    context = args = null;
                 }
                 return result;
             };
@@ -112,91 +83,69 @@
     }
 
     Lrc.prototype.defaults = {
+        version: "1.0.0",
         lrc: '',
         el: '',
         ul: '<ul></ul>',
         cls: 'muui-lrc',
         itemCls: 'muui-lrc-item',
-        scrollingCls: 'muui-lrc-scrolling',
         duration: 500,
         offset: 0
     };
 
     Lrc.prototype.create = function(lrc) {
         delete this._curLine;
+        this.autoScroll = true;
         this.lrc = lrc;
         this.parse();
-        return this.render();
+        this.render();
+
+        var self = this;
+        var wheelNotLeave;
+        this.$el.bind('mousewheel',function() {
+            if (self.autoScroll) {
+                wheelNotLeave = true;
+                self.autoScroll = false;
+                self.$el.bind("mouseleave.lrcwheel", function() {
+                    wheelNotLeave = false;
+                    self.autoScroll = true;
+                    self.$el.unbind("mouseleave.lrcwheel");
+                });
+
+            }
+        });
+        this.$el.bind('mousedown',function() {
+            if (self.autoScroll || wheelNotLeave) {
+                self.autoScroll = false;
+                $(document).bind("mouseup.lrc", function() {
+                    self.autoScroll = true;
+                    $(document).unbind("mouseup.lrc");
+                });
+            }
+        });
+        this.$el.bind("mouseleave.lrcup", function() {
+            wheelNotLeave = false;
+            self.autoScroll = true;
+        });
     };
 
-    Lrc.prototype.render = function() {
-        var $el = this.$el,
-            $ul = this.$ul,
-            _ref = this.opts,
-            _ref1 = this._parsed,
-            scrollingCls = _ref.scrollingCls,
-            itemCls = _ref.itemCls,
-            item, _i, _len;
-
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-            item = _ref1[_i];
-            $ul.append('<li class='+itemCls+' lang="'+
-                item[0]+'">'+(item[1] ? escape(item[1]) : '&nbsp;')+'</li>');
+    Lrc.prototype.parse = function() {
+        var lrc = this.lrc;
+        if (!isString(lrc) || !(lrc = $.trim(lrc))) {
+            this.clear();
         }
-        $el.on('scroll', function() {
-            $el.addClass(scrollingCls);
-            return debounce(function() {
-                return $el.removeClass(scrollingCls);
-            }, 1000);
-        }).html($ul);
-        return this.$item = $el.find("." + itemCls);
+        if (this.isLrc(lrc)) {
+            this.parseLrc(lrc);
+        } else {
+            this.parseTxt(lrc);
+        }
     };
 
-    Lrc.prototype.scrollTo = throttle(function(ms) {
-        ms = ~~ms;
-        if (!ms || this.getState() !== 'lrc') {
-            return;
-        }
-        var $el = this.$el,
-            $item = this.$item,
-            opts = this.opts,
-            _ref = this.opts,
-            scrollingCls = _ref.scrollingCls,
-            offset = _ref.offset,
-            duration = _ref.duration,
-            line, top;
-
-        if ($el.hasClass(scrollingCls)) {
-            return;
-        }
-        $item.removeClass('on');
-        line = this.findLine(ms);
-        if (line === -1) {
-            return $el.scrollTop(0);
-        } else if (line === this._curLine) {
-            return;
-        }
-        this._curLine = line;
-        top = $item.eq(line).addClass('on').position().top - $el.height() / 2 + offset;
-        if (top < 0) {
-            top = 0;
-        }
-        return $el.stop(true).animate({
-            scrollTop: top
-        }, duration);
-    }, 500);
-
-    Lrc.prototype.isLrc = function(lrc) {
-        return timeReg.test(lrc);
-    };
-
-    Lrc.prototype.setState = function(st) {
-        this._state = st;
-        return this.$el.addClass(st);
-    };
-
-    Lrc.prototype.getState = function() {
-        return this._state;
+    Lrc.prototype.clear = function() {
+        this.$ul.empty();
+        this.$ul.append("<li>该歌曲暂时没有歌词</li>");
+        this._parsed = [];
+        this.setState('no-lrc');
     };
 
     Lrc.prototype.parseLrc = function(lrc) {
@@ -223,9 +172,9 @@
             this._parsed = r.sort(function(a, b) {
                 return a[0] - b[0];
             });
-            return this.setState('lrc');
+            this.setState('lrc');
         } else {
-            return this.setState('no-lrc');
+            this.setState('no-lrc');
         }
     };
 
@@ -242,39 +191,72 @@
         }
         if (r.length) {
             this._parsed = r;
-            return this.setState('txt-lrc');
+            this.setState('txt-lrc');
         } else {
-            return this.setState('no-lrc');
+            this.setState('no-lrc');
         }
     };
 
-    Lrc.prototype.parse = function() {
-        var lrc = this.lrc;
-        if (!isString(lrc) || !(lrc = $.trim(lrc))) {
-            this._parsed = [];
-            return this.setState('no-lrc');
+    Lrc.prototype.render = function() {
+        if (!this._parsed || !this._parsed.length) {
+            this.clear();
+            return
         }
-        if (this.isLrc(lrc)) {
-            return this.parseLrc(lrc);
-        } else {
-            return this.parseTxt(lrc);
+        var opts = this.opts,
+            itemCls = opts.itemCls;
+        this.$ul.empty();
+        for (var i = 0, len = this._parsed.length, item; i < len; i++) {
+            item = this._parsed[i];
+            this.$ul.append('<li class='+itemCls+' lang="'+
+                item[0]+'">'+(item[1] ? escape(item[1]) : '&nbsp;')+'</li>');
         }
+        this.$item = this.$el.find("." + itemCls);
     };
+
+    Lrc.prototype.scrollTo = throttle(function(ms) {
+        ms = ~~ms;
+        if (!ms || this.getState() !== 'lrc') {
+            return;
+        }
+        var $el = this.$el,
+            $ul = this.$ul,
+            $item = this.$item,
+            opts = this.opts,
+            offset = opts.offset,
+            duration = opts.duration,
+            line, top;
+        line = this.findLine(ms);
+        //console.log('scrollline:' + line);
+        if (line === -1) {
+            return $el.scrollTop(0);
+        } else if (line === this._curLine) {
+            return;
+        }
+        this._curLine = line;
+        $item.removeClass('on');
+        top = $item.eq(line).addClass('on').offset().top - $ul.offset().top - $el.height() / 2 + offset;
+        if (top < 0) {
+            top = 0;
+        }
+        if(this.autoScroll){
+            $el.stop(true).animate({
+                scrollTop: top
+            }, duration);
+        }
+    }, 500);
 
     Lrc.prototype.findLine = function(ms) {
-        var getTime, head, mid, parsed, tail;
-        parsed = this._parsed;
+        var parsed = this._parsed;
         if (!parsed || !parsed.length) {
             return -1;
         }
-        head = 0;
-        tail = parsed.length;
-        mid = Math.floor(floor / 2);
-        getTime = function(pos) {
-            var item;
-            item = parsed[pos];
-            return item && item[0] || Number.MAX_VALUE;
-        };
+        var head = 0,
+            tail = parsed.length,
+            mid = Math.floor(tail / 2),
+            getTime = function(pos) {
+                var item = parsed[pos];
+                return item && item[0];
+            };
         if (ms < getTime(0)) {
             return -1;
         }
@@ -290,6 +272,19 @@
             }
         }
         return mid;
+    };
+
+    Lrc.prototype.isLrc = function(lrc) {
+        return timeReg.test(lrc);
+    };
+
+    Lrc.prototype.setState = function(st) {
+        this._state = st;
+        return this.$el.addClass(st);
+    };
+
+    Lrc.prototype.getState = function() {
+        return this._state;
     };
 
     window.Lrc = Lrc;

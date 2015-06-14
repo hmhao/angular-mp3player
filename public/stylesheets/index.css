@@ -440,16 +440,21 @@ button:hover, button.pressed, button.pressed:hover {
     color:#FFA200;
     overflow-y: auto;
 }
+.mp3player .lyrics .on {
+    color: #fff;
+}
+.mp3player .lyrics li {
+    padding: 4px;
+}
 
+/*scrollbar*/
 ::-webkit-scrollbar {
     width: 8px;
     height: 14px;
 }
-
 ::-webkit-scrollbar-button {
     display: none;
 }
-
 ::-webkit-scrollbar-track, ::-webkit-scrollbar-track-piece {
     background: -webkit-gradient(linear, left top, right top, from(#f6f6f6), color-stop(50% , #fff), color - stop(75% , #fff), to(#fdfdfd));
     width: 11px;
