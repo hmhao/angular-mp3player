@@ -145,13 +145,15 @@ app.service('Lyrics', ['$http', function ($http) {
             if (cachedData[id]) {
                 callback(cachedData[id]);
             } else {
-                $http.get('/lrcs/abc.lrc', {
+                $http.get('/lrcs/'+ id +'.lrc', {
                     transformResponse : function(data, headersGetter, status){
                         return data;
                     }
                 }).success(function(data){
                     cachedData[id] = data;
                     callback(data);
+                }).error(function(data){
+                    callback('');
                 });
             }
         }

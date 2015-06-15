@@ -187,7 +187,9 @@ app.controller('Mp3playerVisualizeCtrl', ['$scope', 'Player', function ($scope, 
 
 app.controller('Mp3playerLyricsCtrl', ['$scope', 'Lyrics', function ($scope, Lyrics) {
     $scope.getLrc = function(id, callback){
-        id = id || '';
+        if(typeof id === 'undefined'){
+            id = '';
+        }
         Lyrics.get(id, function(data){
             callback(data);
         });

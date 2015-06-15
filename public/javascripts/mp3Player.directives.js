@@ -200,13 +200,20 @@ app.directive('mp3playerLyrics', function() {
         replace: true,
         link: function(scope, element, attrs) {
             var lrc = new Lrc({el:element});
-            scope.getLrc('', function(data){
-                lrc.create(data);
-                scope.$watch('currTime', function(newVal, oldVal) {//监听时间模型以更新时间轴滑动条
-                    if(newVal != oldVal){//更新视图
-                        lrc.scrollTo(newVal * 1000);
-                    }
-                });
+            var watch, id;
+            scope.$watch('trackCurrent', function(value) {
+                if (value != -1){
+                    if(watch) watch();// clear the watch
+                    id = scope.tracks[value].id;
+                    scope.getLrc(id, function(data){
+                        lrc.create(data);
+                        watch = scope.$watch('currTime', function(newVal, oldVal) {
+                            if(newVal != oldVal){//更新视图
+                                lrc.scrollTo(newVal * 1000);
+                            }
+                        });
+                    });
+                }
             });
         }
     }
