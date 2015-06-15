@@ -2,10 +2,10 @@
     <button class="prev" name="prev" ng-class="{pressed:buttons.prev}">
         <span class="glyphicon glyphicon-backward"></span>
     </button>
-    <button class="play" name="play" ng-class="{pressed:buttons.play}">
+    <button class="play" name="play" ng-class="{pressed:buttons.play}" ng-hide="buttons.play">
         <span class="glyphicon glyphicon-play"></span>
     </button>
-    <button class="pause" name="pause" ng-class="{pressed:buttons.pause}">
+    <button class="pause" name="pause" ng-class="{pressed:buttons.pause}" ng-show="buttons.play">
         <span class="glyphicon glyphicon-pause"></span>
     </button>
     <button class="stop" name="stop" ng-class="{pressed:buttons.stop}">
@@ -13,6 +13,9 @@
     </button>
     <button class="next" name="next" ng-class="{pressed:buttons.next}">
         <span class="glyphicon glyphicon-forward"></span>
+    </button>
+    <button class="mode" name="mode">
+        <span class="glyphicon glyphicon-{{curState}}"></span>
     </button>
     <div class="clear"></div>
 </div>

@@ -215,7 +215,7 @@
 
     Lrc.prototype.scrollTo = throttle(function(ms) {
         ms = ~~ms;
-        if (!ms || this.getState() !== 'lrc') {
+        if (!ms || this.getState() === 'no-lrc') {
             return;
         }
         var $el = this.$el,

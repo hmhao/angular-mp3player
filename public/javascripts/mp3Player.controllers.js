@@ -105,15 +105,46 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Pl
         });
     }
 
+    var state = ['retweet','random'];
+    state.retweet = function(isNext){
+        var current = $scope.trackCurrent,
+            length = $scope.tracks.length;
+        if(isNext){
+            return ++current % length;
+        }else{
+            return (--current + length) % length;
+        }
+    };
+    state.random = function(){
+        var current = $scope.trackCurrent,
+            length = $scope.tracks.length,
+            next;
+        do{
+            next = Math.floor(Math.random() * length);
+        }while(next == current);
+        return next;
+    };
+    var stateIndex = 0;
+    $scope.curState = state[stateIndex];
+    $scope.mode = function(){
+        stateIndex = ++stateIndex % state.length;
+        $scope.curState = state[stateIndex];
+    };
+
     $scope.prev = function() {
         if($scope.trackCurrent != -1){
             $scope.log('prev');
             disableAllButtons();
             $scope.buttons.prev = true;
-            if($scope.trackCurrent != Math.max(0,$scope.trackCurrent-1)){
-                $scope.trackCurrent--;
-                $scope.play(0);
+            switch ($scope.curState){
+                case 'retweet':
+                    $scope.trackCurrent = state.retweet(false);
+                    break;
+                case 'random':
+                    $scope.trackCurrent = state.random();
+                    break;
             }
+            $scope.play(0);
         }
     };
 
@@ -131,7 +162,7 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Pl
                 Player.play($scope.trackCurrent, $scope.currTime);
                 Player.onended = function(){
                     console.log('onEnd');
-                    $scope.stop();
+                    $scope.next();
                 };
             });
         }
@@ -161,12 +192,17 @@ app.controller('Mp3playerButtonsCtrl', ['$scope', 'Player', function ($scope, Pl
             $scope.log('next');
             disableAllButtons();
             $scope.buttons.next = true;
-            if($scope.trackCurrent != Math.min($scope.tracks.length-1,$scope.trackCurrent+1)){
-                $scope.trackCurrent++;
-                $scope.play(0);
+            switch ($scope.curState){
+                case 'retweet':
+                    $scope.trackCurrent = state.retweet(true);
+                    break;
+                case 'random':
+                    $scope.trackCurrent = state.random();
+                    break;
             }
+            $scope.play(0);
         }
-    }
+    };
 }]);
 
 app.controller('Mp3playerVolumeCtrl', ['$scope', 'Player', function ($scope, Player) {
