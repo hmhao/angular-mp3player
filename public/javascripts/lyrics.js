@@ -158,7 +158,7 @@
         _ref = lrc.split(splitReg);
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             line = _ref[_i];
-            items = line.match(timeReg);
+            items = line.match(timeReg) || [];
             if ($.isArray(items)) {
                 txt = $.trim(line.replace(items.join(''), ''));
             }

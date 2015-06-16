@@ -1,6 +1,13 @@
 {
     "tracks": [
         {
+            "url": "medias/郭采洁-烟火.mp3",
+            "title": "烟火",
+            "artist": "郭采洁",
+            "genre": "现代",
+            "album": "流行音乐"
+        },
+        {
             "url": "medias/古典音乐-1号圆舞曲.mp3",
             "title": "古典音乐-1号圆舞曲",
             "artist": "纯音乐",

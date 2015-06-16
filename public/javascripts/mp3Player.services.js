@@ -138,24 +138,135 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
     }
 }]);
 
-app.service('Lyrics', ['$http', function ($http) {
+app.service('Lyrics', ['$http', 'BaiduMusic', function ($http, BaiduMusic) {
     var cachedData = {};
-    return {
-        get: function(id, callback) {
-            if (cachedData[id]) {
-                callback(cachedData[id]);
-            } else {
-                $http.get('/lrcs/'+ id +'.lrc', {
-                    transformResponse : function(data, headersGetter, status){
-                        return data;
-                    }
-                }).success(function(data){
-                    cachedData[id] = data;
-                    callback(data);
-                }).error(function(data){
+    var getFromBaidu = function(track, callback){
+        var id = track.id;
+        var query = track.artist + ' ' + track.title;
+        BaiduMusic.getData('search', {query: query}, function(data){
+            if(data){
+                if(data.song && data.song.length > 0){
+                    var songid = data.song[0].songid;
+                    BaiduMusic.getData('lrc', {songid: songid}, function(data){
+                        if(data && data.lrcContent){
+                            cachedData[id] = data.lrcContent;
+                            callback(data.lrcContent);
+                        }else{
+                            callback('');
+                        }
+                    });
+                }else{
                     callback('');
-                });
+                }
+            }else{
+                callback('');
             }
+        });
+    };
+    var getFromServer = function(track, callback) {
+        var id = track.id;
+        if (cachedData[id]) {
+            callback(cachedData[id]);
+        } else {
+            $http.get('/lrcs/'+ id +'.lrc', {
+                transformResponse : function(data, headersGetter, status){
+                    return data;
+                }
+            }).success(function(data){
+                cachedData[id] = data;
+                callback(data);
+            }).error(function(data){
+                callback('');
+            });
         }
+    };
+
+    return {
+        get: getFromBaidu
+    };
+}]);
+
+app.service('BaiduMusic', ['$http', function ($http) {
+    var BaiduMusic = function() {
+        this.cachedData = {
+            album: {},
+            download: {},
+            lrc: {},
+            artist: {},
+            artist_list: {},
+            list: {}
+        };
+        this.urls = {
+            base: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
+            sug: 'http://sug.music.baidu.com/info/suggestion',
+            album: 'http://music.baidu.com/data/music/box/album',
+            download: 'http://music.baidu.com/data/music/fmlink'
+        };
+    };
+    var self = new BaiduMusic();
+
+    BaiduMusic.prototype.getData = function(action, param, callback) {
+        param._t = (new Date()).getTime();
+        param.format = param.format ? param.format : 'json';
+        param.callback = 'JSON_CALLBACK';
+
+        var url = '';
+        switch (action) {
+            case 'album':
+                url = self.urls[action];
+                if (self.cachedData.album[param.albumId]) {
+                    return callback(self.cachedData.album[param.albumId]);
+                }
+                break;
+            case 'download':
+                url = self.urls[action];
+                var key = param.songIds + '_mp3';
+                if (self.cachedData.download[__key]) {
+                    return callback(self.cachedData.download[key]);
+                }
+                break;
+            case 'search':
+                param.method = 'baidu.ting.search.catalogSug';
+                url = self.urls['base'];
+                break;
+            case 'lrc':
+                param.method = 'baidu.ting.song.lry';
+                url = self.urls['base'];
+                self.id = param.songid;
+                if (self.cachedData.lrc[param.songid]) {
+                    return callback(self.cachedData.lrc[param.songid]);
+                }
+                break;
+            case 'artist':
+                param.method = 'baidu.ting.artist.getInfo';
+                url = self.urls['base'];
+                if (self.cachedData.artist[param.tinguid]) {
+                    return callback(self.cachedData.artist[param.tinguid]);
+                }
+                break;
+            case 'artist_list':
+                param.method = 'baidu.ting.artist.getSongList';
+                url = self.urls['base'];
+                if (self.cachedData.artist_list[param.tinguid]) {
+                    return callback(self.cachedData.artist_list[param.tinguid]);
+                }
+                break;
+            default:
+                param.method = 'baidu.ting.billboard.billList';
+                url = self.urls['base'];
+                if (self.cachedData.list[param.type]) {
+                    return callback(self.cachedData.list[param.type]);
+                }
+        }
+
+        $http({method: 'jsonp', url: url, params: param}).success(function(data){
+            callback(data);
+        }).error(function(data){
+            callback(null);
+        });
+    };
+
+    return {
+        getData: self.getData
     };
 }]);
