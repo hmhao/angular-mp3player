@@ -55,7 +55,7 @@ input, input:focus, button, button:focus{
     text-align: center;
     margin: 0 auto;
     padding:10px;
-    width:760px;
+    width:1180px;
 }
 .mp3player .mp3panel{
     margin: 0 auto;
@@ -446,6 +446,30 @@ button:hover, button.pressed, button.pressed:hover {
 }
 .mp3player .lyrics li {
     padding: 4px;
+}
+
+/*search*/
+.mp3player .search {
+    height: 680px;
+    border: 1px solid #000;
+    border-radius:5px;
+    background:rgba(0,0,0,0.65);
+    padding:5px;
+    color:#FFA200;
+    overflow-y: auto;
+}
+.mp3player .search .songlist{
+    margin-top:15px;
+    padding:5px;
+}
+.mp3player .search .songlist li {
+    background: inherit;
+    border: 1px solid rgba(255,162,0,0.5);
+    padding:2px;
+    text-align:left;
+}
+.mp3player .search .songlist a {
+    color: #FFA200;
 }
 
 /*scrollbar*/

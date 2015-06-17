@@ -45,6 +45,21 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
     var _analyser = _ctx.createAnalyser();
     _analyser.connect(_gainNode);
 
+    var audioDecoder = new function(){
+        this.get = function(url, callback){
+            $http.get(url, {responseType: 'arraybuffer'}).
+                success(callback).
+                error(function(data, status) {
+                    console.log('ERROR WHILE GETTING AUDIO FILES');
+                });
+        };
+        this.decode = function(data, callback){
+            _ctx.decodeAudioData(data, function(buffer) {//解码音频数据
+                callback(buffer);
+            }, function(err) {console.log('ERROR DECODING AUDIO');});
+        }
+    }();
+
     return {
         size: 128,//frequency,unit8Array的长度
         current: function(){
@@ -54,23 +69,9 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
             return _playing;
         },
         init: function(tracks) {
-            tracks.forEach(function(val) {//请求音频数据
-                $http.get(val.url, {responseType: 'arraybuffer'}).
-                    success(function(data) {
-                        _ctx.decodeAudioData(data, function(buffer) {//解码音频数据
-                            _trackBuffer[val.id] = buffer;//存储解码后的音频数据
-                            for (var i=0; i<tracks.length; i++) {
-                                if (tracks[i].id == val.id) {
-                                    tracks[i].loaded = true;
-                                    tracks[i].duration = buffer.duration;
-                                    $rootScope.$apply();
-                                }
-                            }
-                        }, function(err) {console.log('ERROR DECODING AUDIO');});
-                    }).
-                    error(function(data, status) {
-                        console.log('ERROR WHILE GETTING AUDIO FILES');
-                    });
+            var _this = this;
+            tracks.forEach(function(track) {
+                _this.add(track);
             });
 
             //可视化当前正在播放的音频
@@ -81,7 +82,6 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
                 window.oRequestAnimationFrame ||
                 window.mzRequestAnimationFrame;
 
-            var _this = this;
             var v = function(){
                 _analyser.getByteFrequencyData(arr);
                 //将分析得到的音频数据传递给mv.visualizer方法可视化
@@ -91,13 +91,21 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
             requestAnimationFrame(v);
         },
         add: function(track, data){
-            if(!data) return;
-            _ctx.decodeAudioData(data, function(buffer) {//解码音频数据
-                _trackBuffer[track.id] = buffer;//存储解码后的音频数据
-                track.loaded = true;
-                track.duration = buffer.duration;
-                $rootScope.$apply();
-            }, function(err) {console.log('ERROR DECODING AUDIO');});
+            var decode = function(data){
+                audioDecoder.decode(data, function(buffer){//解码音频数据
+                    _trackBuffer[track.id] = buffer;//存储解码后的音频数据
+                    track.loaded = true;
+                    track.duration = buffer.duration;
+                    $rootScope.$apply();
+                });
+            };
+            if(!data) {
+                audioDecoder.get(track.url, function(data){//请求音频数据
+                    decode(data);
+                });
+            }else{
+                decode(data);
+            }
         },
         play:function(id, time){
             _currentID = id;
@@ -140,53 +148,52 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
 
 app.service('Lyrics', ['$http', 'BaiduMusic', function ($http, BaiduMusic) {
     var cachedData = {};
-    var getFromBaidu = function(track, callback){
+    var get = function(track, callback){
         var id = track.id;
-        var query = track.artist + ' ' + track.title;
-        BaiduMusic.getData('search', {query: query}, function(data){
-            if(data){
-                if(data.song && data.song.length > 0){
-                    var songid = data.song[0].songid;
-                    BaiduMusic.getData('lrc', {songid: songid}, function(data){
-                        if(data && data.lrcContent){
-                            cachedData[id] = data.lrcContent;
-                            callback(data.lrcContent);
+        if (cachedData[id]) {//已缓存
+            callback(cachedData[id]);
+        } else {
+            if(track.lrc){//存在歌词地址
+                $http({url: 'lrc', params: {url: track.lrc},
+                    transformResponse : function(data, headersGetter, status){
+                        return data;
+                }}).success(function(data){
+                    cachedData[id] = data;
+                    callback(data);
+                }).error(function(data){
+                    callback('');
+                });
+            }else{
+                var query = track.artist + ' ' + track.title;
+                BaiduMusic.getData('search', {query: query}, function(data){
+                    if(data){
+                        if(data.song && data.song.length > 0){
+                            var songid = data.song[0].songid;
+                            BaiduMusic.getData('lrc', {songid: songid}, function(data){
+                                if(data && data.lrcContent){
+                                    cachedData[id] = data.lrcContent;
+                                    callback(data.lrcContent);
+                                }else{
+                                    callback('');
+                                }
+                            });
                         }else{
                             callback('');
                         }
-                    });
-                }else{
-                    callback('');
-                }
-            }else{
-                callback('');
+                    }else{
+                        callback('');
+                    }
+                });
             }
-        });
-    };
-    var getFromServer = function(track, callback) {
-        var id = track.id;
-        if (cachedData[id]) {
-            callback(cachedData[id]);
-        } else {
-            $http.get('/lrcs/'+ id +'.lrc', {
-                transformResponse : function(data, headersGetter, status){
-                    return data;
-                }
-            }).success(function(data){
-                cachedData[id] = data;
-                callback(data);
-            }).error(function(data){
-                callback('');
-            });
         }
     };
 
     return {
-        get: getFromBaidu
+        get: get
     };
 }]);
 
-app.service('BaiduMusic', ['$http', function ($http) {
+app.service('BaiduMusic', ['$http', , function ($http) {
     var BaiduMusic = function() {
         this.cachedData = {
             album: {},
@@ -229,6 +236,10 @@ app.service('BaiduMusic', ['$http', function ($http) {
                 param.method = 'baidu.ting.search.catalogSug';
                 url = self.urls['base'];
                 break;
+            case 'song':
+                param.method = 'baidu.ting.song.play';
+                url = self.urls['base'];
+                break;
             case 'lrc':
                 param.method = 'baidu.ting.song.lry';
                 url = self.urls['base'];
@@ -259,7 +270,7 @@ app.service('BaiduMusic', ['$http', function ($http) {
                 }
         }
 
-        $http({method: 'jsonp', url: url, params: param}).success(function(data){
+        $http({method: 'JSONP', url: url, params: param}).success(function(data){
             callback(data);
         }).error(function(data){
             callback(null);

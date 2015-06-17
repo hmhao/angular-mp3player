@@ -213,3 +213,47 @@ app.controller('Mp3playerLyricsCtrl', ['$scope', 'Lyrics', function ($scope, Lyr
         });
     }
 }]);
+
+app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Player', function ($scope, BaiduMusic, Player) {
+    $scope.searchEngine = {
+        engines: ['百度', '网易', '腾讯'],
+        current: 0
+    };
+    $scope.searchSong = '';
+    $scope.songs = [];
+    $scope.searchMusic = function(){
+        if($scope.searchSong !== ''){
+            BaiduMusic.getData('search',{query: $scope.searchSong}, function(data){
+                if(data && data.song){
+                    $scope.songs = data.song;
+                }else{
+                    $scope.songs = [];
+                }
+            });
+        }else{
+            $scope.songs = [];
+        }
+    };
+    $scope.playMusic = function(song){
+        BaiduMusic.getData('song',{songid: song.songid}, function(data){
+            if(data && data.error_code == 22000){
+                var info = data.songinfo,
+                    bitrate = data.bitrate;
+                var track = {
+                    id: $scope.tracks.length,
+                    artist: info.author,
+                    title: info.title,
+                    album: info.album_title,
+                    genre: '',
+                    songid: data.song_id,
+                    lrc: info.lrclink,
+                    url: bitrate.file_link,
+                    loaded: false,
+                    duration: bitrate.file_duration
+                };
+                $scope.tracks.push(track);
+                Player.add(track);
+            }
+        });
+    }
+}]);

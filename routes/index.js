@@ -1,16 +1,25 @@
 var express = require("express");
+var request = require('request');
 var config = require("./config");
 var router = express.Router();
 
 router.get('/', function(req, res){
-    var fs = require("fs");
-    fs.readdir(config.mediaPath, function(err, files){
-        if(err){
-            console.log(err);
-        }else{
-            res.render('index', {title: config.appName, music: files});
-        }
-    });
+    res.render('index', {title: config.appName});
 });
+
+router.get('/lrc', function ($req, $res) {
+    var url = $req.query.url || '';
+    if(url){
+        request.get(url, function (err, res, data) {
+            if (err) {
+                $res.send('');
+            }
+            $res.send(data);
+        });
+    }else{
+        $res.send('');
+    }
+});
+
 
 module.exports = router;

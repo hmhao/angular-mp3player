@@ -1,0 +1,30 @@
+<div class="search" ng-controller="Mp3playerSearchCtrl">
+    <div class="input-group">
+        <div class="input-group-btn">
+            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"  role="button">
+                {{searchEngine.engines[searchEngine.current]}} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="engine in searchEngine.engines">
+                    <a href="javascript:void(0)" ng-click="searchEngine.current = $index">{{engine}}</a>
+                </li>
+            </ul>
+        </div><!-- /btn-group -->
+        <input type="text" class="form-control" role="search" ng-model="searchSong" />
+        <span class="input-group-btn">
+            <a class="btn btn-default" href="javascript:void(0)" role="button" ng-click="searchMusic()">
+                <i class="glyphicon glyphicon-search"></i>
+            </a>
+        </span>
+    </div><!-- /input-group -->
+    <ul class="songlist list-group">
+        <li class="list-group-item" ng-repeat="song in songs">
+            {{song.artistname}} - {{song.songname | titleLength}}
+            <span class="pull-right">
+                <a href="javascript:void(0)" role="button" ng-click="playMusic(song)">
+                    <span class="glyphicon glyphicon-play"></span>
+                </a>
+            </span>
+        </li>
+    </ul>
+</div>
