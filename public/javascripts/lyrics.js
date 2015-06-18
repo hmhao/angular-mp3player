@@ -258,7 +258,7 @@
             mid = Math.floor(tail / 2),
             getTime = function(pos) {
                 var item = parsed[pos];
-                return item && item[0];
+                return item ? item[0] : Number.MAX_VALUE;
             };
         if (ms < getTime(0)) {
             return -1;

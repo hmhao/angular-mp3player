@@ -458,6 +458,31 @@ button:hover, button.pressed, button.pressed:hover {
     color:#FFA200;
     overflow-y: auto;
 }
+.mp3player .search .input-group a {
+    color: #FFA200;
+    background-color: #222222;
+    border: none;
+}
+.mp3player .search .input-group a:hover{
+    background-color: #333333
+}
+.mp3player .search .input-group .form-control {
+    border: none;
+    height: inherit;
+    z-index: 3;
+}
+.mp3player .search .dropdown-menu {
+    background-color: #222222
+}
+.mp3player .search .dropdown-menu>li>a:hover, .mp3player .search .dropdown-menu>li>a:focus {
+    background-color: #CAAF2A
+}
+.mp3player .search .dropdown-menu>li>a {
+    color: #FFA200
+}
+.mp3player .search .dropdown-menu>li>a:hover, .mp3player .search .dropdown-menu>li>a:focus {
+    color: #FFFFFF
+}
 .mp3player .search .songlist{
     margin-top:15px;
     padding:5px;
