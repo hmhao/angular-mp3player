@@ -198,6 +198,9 @@
     };
 
     Lrc.prototype.render = function() {
+        this.$el.stop(true).animate({
+            scrollTop: 0
+        }, 0);
         if (!this._parsed || !this._parsed.length) {
             this.clear();
             return

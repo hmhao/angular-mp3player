@@ -235,6 +235,12 @@ app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Player', functio
         }
     };
     $scope.playMusic = function(song){
+        //检查歌曲是否存在
+        for(var i = $scope.tracks.length - 1; i > 0; i--){
+            if($scope.tracks[i].songid == song.songid){
+                return;
+            }
+        }
         BaiduMusic.getData('song',{songid: song.songid}, function(data){
             if(data && data.error_code == 22000){
                 var info = data.songinfo,
@@ -245,7 +251,7 @@ app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Player', functio
                     title: info.title,
                     album: info.album_title,
                     genre: '',
-                    songid: data.song_id,
+                    songid: info.song_id,
                     lrc: info.lrclink,
                     url: bitrate.file_link,
                     loaded: false,

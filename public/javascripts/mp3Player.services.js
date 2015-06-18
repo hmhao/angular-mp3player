@@ -46,8 +46,18 @@ app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {
     _analyser.connect(_gainNode);
 
     var audioDecoder = new function(){
+        var isHttp = /^https?:/i;
         this.get = function(url, callback){
-            $http.get(url, {responseType: 'arraybuffer'}).
+            var config = {
+                responseType: 'arraybuffer'
+            };
+            if (isHttp.test(url)) {
+                config.url = 'media';
+                config.params = {url: url};//通过服务器拉取第三方音频
+            }else{
+                config.url = url;//拉取本地音频
+            }
+            $http(config).
                 success(callback).
                 error(function(data, status) {
                     console.log('ERROR WHILE GETTING AUDIO FILES');
@@ -166,20 +176,15 @@ app.service('Lyrics', ['$http', 'BaiduMusic', function ($http, BaiduMusic) {
             }else{
                 var query = track.artist + ' ' + track.title;
                 BaiduMusic.getData('search', {query: query}, function(data){
-                    if(data){
-                        if(data.song && data.song.length > 0){
-                            var songid = data.song[0].songid;
-                            BaiduMusic.getData('lrc', {songid: songid}, function(data){
-                                if(data && data.lrcContent){
-                                    cachedData[id] = data.lrcContent;
-                                    callback(data.lrcContent);
-                                }else{
-                                    callback('');
-                                }
-                            });
-                        }else{
-                            callback('');
-                        }
+                    if(data && data.song && data.song.length > 0){
+                        BaiduMusic.getData('lrc', {songid: data.song[0].songid}, function(data){
+                            if(data && data.lrcContent){
+                                cachedData[id] = data.lrcContent;
+                                callback(data.lrcContent);
+                            }else{
+                                callback('');
+                            }
+                        });
                     }else{
                         callback('');
                     }
@@ -193,7 +198,7 @@ app.service('Lyrics', ['$http', 'BaiduMusic', function ($http, BaiduMusic) {
     };
 }]);
 
-app.service('BaiduMusic', ['$http', , function ($http) {
+app.service('BaiduMusic', ['$http', function ($http) {
     var BaiduMusic = function() {
         this.cachedData = {
             album: {},
