@@ -169,7 +169,7 @@ app.directive('mp3playerVisualize', function() {
         templateUrl: '/directives/mp3player-visualize.html',
         replace: true,
         link: function(scope, element, attrs) {
-            var canvas = $('#canvas')[0],
+            var canvas = element.find('canvas')[0],
                 visualizer = new Visualizer(canvas),
                 vQueue = [
                     visualizer.renderStripblock,
