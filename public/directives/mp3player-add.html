@@ -1,8 +1,11 @@
 <div class="add-button" ng-controller="Mp3playerAddCtrl">
     <button class="add">
-        <label for="upload">
-            <span class="glyphicon glyphicon-plus"></span>
-        </label>
-        <input class="upload" type="file" id="upload" name="upload"/>
+        <iframe name="uploadIframe" style="display: none"></iframe>
+        <form action="/upload" enctype="multipart/form-data" method="post" target="uploadIframe">
+            <label for="upload">
+                <span class="glyphicon glyphicon-plus"></span>
+            </label>
+            <input class="upload" type="file" id="upload" name="upload" accept="audio/*"/>
+        </form>
     </button>
 </div>

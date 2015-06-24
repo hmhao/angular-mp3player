@@ -1,10 +1,10 @@
-var express = require("express");
+var express = require('express');
 var request = require('request');
-var config = require("./config");
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    res.render('index', {title: config.appName});
+    var app = require('../app');
+    res.render('index', {title: app.get('appName')});
 });
 
 router.get('/lrc', function ($req, $res) {
@@ -27,6 +27,14 @@ router.get('/media', function ($req, $res, next) {
         request.get(url).pipe($res);
     } else {
         $res.sendStatus(404);
+    }
+});
+
+router.post('/upload', function(req, res) {
+    if(req.files && !req.files.upload.truncated){
+        res.json({ message: 'Uploaded success!'});
+    }else{
+        res.json({ message: 'Uploaded failed!'});
     }
 });
 

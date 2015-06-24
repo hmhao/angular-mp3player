@@ -84,6 +84,8 @@ app.directive('mp3playerAdd', function() {
                     });
                 };
                 fr.readAsArrayBuffer(file);
+                angular.element(this).parent('form').submit();
+                angular.element(this).val('');
             });
         }
     }

@@ -162,7 +162,7 @@ input, input:focus, button, button:focus{
     width: 30px;
     height: 30px;
     max-width: 30px;
-    margin: -2px 0 0 -7px;
+    margin: -1px 0 0 -7px;
     padding: 5px 0 0 2px;
     display: block;
     cursor: pointer;
