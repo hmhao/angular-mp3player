@@ -2,12 +2,14 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var multer = require('multer');
+var session = require('express-session');
 var fs = require('fs');
 var ejs = require('ejs');
 
+var passport = require('./routes/passport');
 var routes = require('./routes/index');
 
 var app = express();
@@ -49,6 +51,9 @@ app.use(multer({
     }
 }));
 app.use(cookieParser());
+app.use(session({secret: 'secret'}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);

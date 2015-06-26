@@ -1,0 +1,26 @@
+<div class="navbar navbar-default navbar-inverse navbar-fixed-bottom">
+    <div class="navbar-collapse">
+        <!-- Right side of the navbar -->
+        <!-- Login Form -->
+        <form class="navbar-form navbar-right" name="loginForm" role="login" ng-submit="loginFn()" ng-hide="user.isLogged">
+            <div class="form-group">
+                <input type="text" class="form-control" ng-model="login.username" name="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" ng-model="login.password" name="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary" >登录</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">注册</button>
+        </form>
+        <!-- Logout Form -->
+        <form class="navbar-form navbar-right ng-hide" role="logout" ng-submit="logoutFn()" ng-show="user.isLogged">
+            <div class="form-group">
+                <label class="ng-binding">Hello {{user.username}}</label>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">登出</button>
+            </div>
+        </form>
+    </div>
+    <register id="signupModal" class="modal fade"></register>
+</div>

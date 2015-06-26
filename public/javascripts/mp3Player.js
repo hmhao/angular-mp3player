@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('angular-mp3player', []);
+angular.module('angular-mp3player', ['angular-navbar']);

@@ -1,0 +1,27 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form name="registerForm" role="register" ng-submit="registerFn()" >
+            <div class="modal-header">注册</div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="name">用户名</label>
+                    <input id="name" name="name" ng-model="register.username" type="text" class="form-control" placeholder="Username">
+                </div>
+                <div class="form-group">
+                    <label for="email">邮箱</label>
+                    <input id="email" name="email" ng-model="register.email" type="text" class="form-control" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input id="password" name="password" ng-model="register.password" type="password" class="form-control" placeholder="Password">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="alert alert-success text-center" role="alert" ng-show="state.isSuccess">{{state.success}}</div>
+                <div class="alert alert-danger text-center" role="alert" ng-show="state.isError">{{state.error}}</div>
+                <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
+                <button type="submit" class="btn btn-success" ng-disabled="state.isSubmit">提交</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -12,10 +12,10 @@
     <!-- endbower -->
     <link rel='stylesheet' href='/stylesheets/index.css'/>
 </head>
-<body>
+<body ng-app="angular-mp3player">
 <header><%= title %></header>
-
-<div id="mp3player" class="container" ng-app="angular-mp3player">
+<navbar></navbar>
+<div id="mp3player" class="container">
     <mp3player></mp3player>
 </div>
 
@@ -24,6 +24,7 @@
 <script src="/libs/angular/angular.js"></script>
 <script src="/libs/bootstrap/dist/js/bootstrap.js"></script>
 <!-- endbower -->
+<script src="/javascripts/navbar.js"></script>
 <script src="/javascripts/mp3Player.js"></script>
 <script src="/javascripts/mp3Player.controllers.js"></script>
 <script src="/javascripts/mp3Player.directives.js"></script>
