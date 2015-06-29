@@ -51,7 +51,7 @@ app.service('AuthenticationService', ['$http', '$timeout', '$q', '$session', fun
     this.register = function (newUser) {
         var register = $http.post('/register', newUser);
         register.success(function (user) {
-            //login(user);
+            $session.set('user', user);
         });
         return register;
     };
@@ -71,9 +71,7 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
         console.log('start login');
         AuthenticationService.login($scope.login)
             .success(function (user) {
-                $scope.user.isLogged = true;
-                $scope.user.username = user.username;
-                $scope.user.email = user.email;
+                onUserLogined(user);
             })
             .error(function (err) {
                 console.log('login:' + err.message);
@@ -89,13 +87,20 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
             });
 
     };
+    $scope.$on('register_success', function(event, user){
+        onUserLogined(user);
+    });
 
     AuthenticationService.user()
         .then(function(user){
-            $scope.user.isLogged = true;
-            $scope.user.username = user.username;
-            $scope.user.email = user.email;
+            onUserLogined(user);
         });
+
+    function onUserLogined(user){
+        $scope.user.isLogged = true;
+        $scope.user.username = user.username;
+        $scope.user.email = user.email;
+    }
 }]);
 
 app.controller('RegisterCtrl', ['$scope', '$timeout', 'AuthenticationService', function ($scope, $timeout, AuthenticationService) {
@@ -117,6 +122,7 @@ app.controller('RegisterCtrl', ['$scope', '$timeout', 'AuthenticationService', f
             .success(function (user) {
                 $scope.state.isSuccess = true;
                 $scope.state.success = 'register success';
+                $scope.$emit('register_success', user);
                 $timeout(function () {
                     $scope.close();
                 }, 1500);

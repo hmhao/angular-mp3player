@@ -32,7 +32,34 @@ var UserSchema = new mongoose.Schema({
         type: String,
         required: false,
         unique: true
-    }
+    },
+    tracks: [{
+        url: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
+        artist: {
+            type: String,
+            required: true
+        },
+        genre: {
+            type: String,
+            required: true
+        },
+        album: {
+            type: String,
+            required: true
+        },
+        lrc: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 // Bcrypt middleware

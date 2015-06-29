@@ -3,7 +3,7 @@ var app = angular.module('angular-mp3player');
 app.directive('mp3player', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player.html',
+        templateUrl: '/directives/mp3player/mp3player.html',
         replace: true
     }
 });
@@ -11,7 +11,7 @@ app.directive('mp3player', function() {
 app.directive('mp3playerDisplay', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-display.html',
+        templateUrl: '/directives/mp3player/mp3player-display.html',
         replace: true,
         link: function(scope, element, attrs) {
             var flyinText = new FlyinText();
@@ -33,7 +33,7 @@ app.directive('mp3playerDisplay', function() {
 app.directive('mp3playerTime', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-time.html',
+        templateUrl: '/directives/mp3player/mp3player-time.html',
         replace: true,
         link: function(scope, element, attrs) {
             var timeSlider = element.find('.slider.time');
@@ -71,7 +71,7 @@ app.directive('mp3playerTime', function() {
 app.directive('mp3playerAdd', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-add.html',
+        templateUrl: '/directives/mp3player/mp3player-add.html',
         replace: true,
         link: function(scope, element, attrs) {
             element.find('#upload').on('change', function(e){
@@ -94,7 +94,7 @@ app.directive('mp3playerAdd', function() {
 app.directive('mp3playerButtons', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-buttons.html',
+        templateUrl: '/directives/mp3player/mp3player-buttons.html',
         replace: true,
         link: function(scope, element, attrs) {
             element.delegate('button', 'click', function(){
@@ -112,7 +112,7 @@ app.directive('mp3playerButtons', function() {
 app.directive('mp3playerVolume', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-volume.html',
+        templateUrl: '/directives/mp3player/mp3player-volume.html',
         replace: true,
         link: function(scope, element, attrs) {
             var volumeSlider = element.find('.slider.volume');
@@ -151,7 +151,7 @@ app.directive('mp3playerVolume', function() {
 app.directive('mp3playerTracks', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-tracks.html',
+        templateUrl: '/directives/mp3player/mp3player-tracks.html',
         replace: true,
         link: function(scope, element, attrs) {
             element.delegate('ul li', 'click', function(){
@@ -168,7 +168,7 @@ app.directive('mp3playerTracks', function() {
 app.directive('mp3playerVisualize', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-visualize.html',
+        templateUrl: '/directives/mp3player/mp3player-visualize.html',
         replace: true,
         link: function(scope, element, attrs) {
             var canvas = element.find('canvas')[0],
@@ -198,7 +198,7 @@ app.directive('mp3playerVisualize', function() {
 app.directive('mp3playerLyrics', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-lyrics.html',
+        templateUrl: '/directives/mp3player/mp3player-lyrics.html',
         replace: true,
         link: function(scope, element, attrs) {
             var lrc = new Lrc({el:element});
@@ -224,7 +224,7 @@ app.directive('mp3playerLyrics', function() {
 app.directive('mp3playerSearch', function() {
     return {
         restrict: 'E',
-        templateUrl: '/directives/mp3player-search.html',
+        templateUrl: '/directives/mp3player/mp3player-search.html',
         replace: true,
         link: function(scope, element, attrs) {
 

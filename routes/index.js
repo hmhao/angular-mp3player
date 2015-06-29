@@ -78,7 +78,8 @@ router.post('/register', function(req, res, next) {
                 if (err) { return next(err); }
                 var result = {
                     username: user.username,
-                    email: user.email
+                    email: user.email,
+                    tracks: user.tracks
                 };
                 return res.send(result);
             });
@@ -97,7 +98,8 @@ router.post('/login', function (req, res, next) {
             if (err) { return next(err); }
             var result = {
                 username: user.username,
-                email: user.email
+                email: user.email,
+                tracks: user.tracks
             };
             return res.send(result);
         });
@@ -113,7 +115,8 @@ router.get('/user', passport.ensureAuthenticated, function(req, res) {
     var user = req.user;
     var result = {
         username: user.username,
-        email: user.email
+        email: user.email,
+        tracks: user.tracks
     };
     return res.send(result);
 });
