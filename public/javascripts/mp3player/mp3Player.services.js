@@ -1,33 +1,24 @@
 var app = angular.module('angular-mp3player');
 
 app.service('Track', ['$http', function ($http) {
-    var cachedData;
     return {
-        getTracklist: function(callback) {
-            if (cachedData) {
-                callback(cachedData);
-            } else {
-                $http({
-                    method: 'GET',
-                    url: '/medias/tracklist.json'
-                }).success(function(data){
-                    var i = 0;
-                    cachedData = [];
-                    data.tracks.forEach(function(data) {
-                        cachedData.push({
-                            id: i++,
-                            artist: data.artist,
-                            title: data.title,
-                            album: data.album,
-                            genre: data.genre,
-                            url: data.url,
-                            loaded: false,
-                            duration: ''
-                        });
-                    });
-                    callback(cachedData);
+        parse: function(data){
+            var i = 0;
+            var tracks = [];
+            data.forEach(function(track) {
+                tracks.push({
+                    id: i++,
+                    artist: track.artist,
+                    title: track.title,
+                    album: track.album,
+                    genre: track.genre,
+                    url: track.url,
+                    lrc: track.lrc,
+                    loaded: false,
+                    duration: ''
                 });
-            }
+            });
+            return tracks;
         }
     };
 }]);

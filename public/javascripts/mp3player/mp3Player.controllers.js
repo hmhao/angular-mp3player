@@ -15,9 +15,11 @@ app.controller('Mp3playerCtrl', ['$rootScope', '$scope', 'Track', 'Player', func
     $scope.tracks = [];
     $scope.trackCurrent = -1;
 
-    Track.getTracklist(function(data){
-        $scope.tracks = data;
-        Player.init($scope.tracks);
+    $scope.$on('user_logined', function(event, user){
+        if(user.tracks && user.tracks.length){
+            $scope.tracks = Track.parse(user.tracks);
+            Player.init($scope.tracks);
+        }
     });
 }]);
 

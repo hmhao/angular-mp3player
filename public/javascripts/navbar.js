@@ -84,6 +84,7 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
                 $scope.user.isLogged = false;
                 $scope.user.username = '';
                 $scope.user.email = '';
+                $scope.$emit('user_logouted');
             });
 
     };
@@ -92,14 +93,17 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
     });
 
     AuthenticationService.user()
-        .then(function(user){
-            onUserLogined(user);
+        .then(function(result){
+            if(result.status === 200){
+                onUserLogined(result.data);
+            }
         });
 
     function onUserLogined(user){
         $scope.user.isLogged = true;
         $scope.user.username = user.username;
         $scope.user.email = user.email;
+        $scope.$emit('user_logined', user);
     }
 }]);
 
