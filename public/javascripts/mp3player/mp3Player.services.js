@@ -8,6 +8,7 @@ app.service('Track', ['$http', function ($http) {
             data.forEach(function(track) {
                 tracks.push({
                     id: i++,
+                    save: true,
                     artist: track.artist,
                     title: track.title,
                     album: track.album,

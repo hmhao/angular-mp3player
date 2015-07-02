@@ -198,6 +198,35 @@ app.controller('Mp3playerVolumeCtrl', ['$scope', 'Player', function ($scope, Pla
     });
 }]);
 
+app.controller('Mp3playerTracksCtrl', ['$scope', 'Player', function ($scope, Player) {
+    var curTrackMenu = null;
+    $scope.trackMenuItems = [
+        {
+            'label': '收藏',
+            active: false,
+            select: function(item, items, index){
+                item.active = !item.active;
+                curTrackMenu.save = item.active;
+            }
+        },
+        {
+            'label': '下载',
+            active: false,
+            select: function(item, items, index){
+
+            }
+        }
+    ];
+
+    $scope.initHolding = function($event){
+        var target = angular.element($event.target),
+            index = target.attr('index'),
+            track = $scope.tracks[index];
+        $scope.trackMenuItems[0].active = track.save;
+        curTrackMenu = track;
+    };
+}]);
+
 app.controller('Mp3playerVisualizeCtrl', ['$scope', 'Player', function ($scope, Player) {
     $scope.size = Player.size;
     $scope.visualize = function(visualizer){
