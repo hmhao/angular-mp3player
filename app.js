@@ -9,7 +9,6 @@ var session = require('express-session');
 var fs = require('fs');
 var ejs = require('ejs');
 
-var passport = require('./server/routes/passport');
 var routes = require('./server/routes/index');
 
 var app = express();
@@ -52,8 +51,8 @@ app.use(multer({
 }));
 app.use(cookieParser());
 app.use(session({secret: 'secret'}));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(routes.passport.initialize());
+app.use(routes.passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
