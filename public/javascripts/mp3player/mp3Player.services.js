@@ -1,25 +1,25 @@
 var app = angular.module('angular-mp3player');
 
 app.service('Track', ['$http', function ($http) {
-    return {
-        parse: function(data){
-            var i = 0;
-            var tracks = [];
-            data.forEach(function(track) {
-                tracks.push({
-                    id: i++,
-                    save: true,
-                    artist: track.artist,
-                    title: track.title,
-                    album: track.album,
-                    genre: track.genre,
-                    url: track.url,
-                    lrc: track.lrc,
-                    loaded: false,
-                    duration: ''
-                });
+    this.tracks = [];
+
+    this.parse = function(data, isUser){
+        var tracks = this.tracks;
+        data = !angular.isArray(data) ? [data] : data;
+        data.forEach(function(track) {
+            angular.extend(track, {
+                save: isUser || false,
+                loaded: false,
+                duration: ''
             });
-            return tracks;
+        });
+        return data;
+    };
+
+    this.add = function(track){
+        var tracks = !angular.isArray(track) ? [track] : track;
+        for(var i = 0, id = this.tracks.length, len = tracks.length; i < len; i++, id++){
+            this.tracks.push(angular.extend(tracks[i], {id: id}));
         }
     };
 }]);

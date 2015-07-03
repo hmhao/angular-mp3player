@@ -9,14 +9,14 @@ var session = require('express-session');
 var fs = require('fs');
 var ejs = require('ejs');
 
-var passport = require('./routes/passport');
-var routes = require('./routes/index');
+var passport = require('./server/routes/passport');
+var routes = require('./server/routes/index');
 
 var app = express();
 
 app.set('appName', 'angular-mp3player');
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/server/views'));
 app.engine('.html', ejs.__express);
 app.set('view engine', 'html');
 app.set('mediaPath', path.join(__dirname, 'public/medias'));

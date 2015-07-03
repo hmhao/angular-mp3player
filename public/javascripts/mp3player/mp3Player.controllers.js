@@ -12,13 +12,13 @@ app.controller('Mp3playerCtrl', ['$rootScope', '$scope', 'Track', 'Player', func
     $scope.title = 'AngularJS - MP3 Player';
     $scope.theme = 'Dark';
 
-    $scope.tracks = [];
+    $scope.tracks = Track.tracks;
     $scope.trackCurrent = -1;
 
     $scope.$on('user_logined', function(event, user){
         if(user.tracks && user.tracks.length){
-            $scope.tracks = Track.parse(user.tracks);
-            Player.init($scope.tracks);
+            Track.add(Track.parse(user.tracks, true));
+            Player.init(Track.tracks);
         }
     });
 }]);
@@ -63,20 +63,17 @@ app.controller('Mp3playerTimeCtrl', ['$scope', '$interval', 'Player', function (
     });
 }]);
 
-app.controller('Mp3playerAddCtrl', ['$scope', 'Player', function ($scope, Player) {
+app.controller('Mp3playerAddCtrl', ['$scope', 'Track', 'Player', function ($scope, Track, Player) {
     $scope.addLocalAudio = function(opts){
-        var track = {
-            id: $scope.tracks.length,
+        var track = Track.parse({
             artist: 'local',
             title: opts.title,
             album: 'local',
             genre: 'local',
-            url: '',
-            loaded: false,
-            duration: ''
-        };
-        $scope.tracks.push(track);
-        Player.add(track, opts.data);
+            url: ''
+        }, true);
+        Track.add(track);
+        Player.add(track[0], opts.data);
     }
 }]);
 
@@ -245,7 +242,7 @@ app.controller('Mp3playerLyricsCtrl', ['$scope', 'Lyrics', function ($scope, Lyr
     }
 }]);
 
-app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Player', function ($scope, BaiduMusic, Player) {
+app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Track', 'Player', function ($scope, BaiduMusic, Track, Player) {
     $scope.searchEngine = {
         engines: ['百度', '网易', '腾讯'],
         current: 0
@@ -276,20 +273,18 @@ app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Player', functio
             if(data && data.error_code == 22000){
                 var info = data.songinfo,
                     bitrate = data.bitrate;
-                var track = {
-                    id: $scope.tracks.length,
+                var track = Track.parse({
                     artist: info.author,
                     title: info.title,
                     album: info.album_title,
                     genre: '',
                     songid: info.song_id,
                     lrc: info.lrclink,
-                    url: bitrate.file_link,
-                    loaded: false,
-                    duration: bitrate.file_duration
-                };
-                $scope.tracks.push(track);
-                Player.add(track);
+                    url: bitrate.file_link/*,
+                    duration: bitrate.file_duration*/
+                });
+                Track.add(track);
+                Player.add(track[0]);
             }
         });
     }

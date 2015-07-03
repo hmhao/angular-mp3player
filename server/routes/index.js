@@ -5,7 +5,7 @@ var User = require('../models/user');
 var router = express.Router();
 
 router.get('/', function (req, res) {
-    var app = require('../app');
+    var app = require('../../app');
     res.render('index', {title: app.get('appName')});
 });
 
