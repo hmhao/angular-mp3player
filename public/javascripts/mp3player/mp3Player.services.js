@@ -22,6 +22,30 @@ app.service('Track', ['$http', function ($http) {
             this.tracks.push(angular.extend(tracks[i], {id: id}));
         }
     };
+
+    this.save = function(track, isSave){
+        var params = {};
+        if(isSave){
+            params.url = track.url;
+            params.title = track.title;
+            params.artist = track.artist;
+            params.genre = track.genre;
+            params.album = track.album;
+            params.lrc = track.lrc;
+        }else{
+            params.id = track._id;
+        }
+        return $http.post('/save', params)
+            .success(function(data){
+                if(data){
+                    if(data.id){
+                        track._id = data.id;
+                    }else{
+                        delete track._id;
+                    }
+                }
+            });
+    }
 }]);
 
 app.service('Player', ['$rootScope', '$http', function ($rootScope, $http) {

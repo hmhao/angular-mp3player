@@ -195,15 +195,18 @@ app.controller('Mp3playerVolumeCtrl', ['$scope', 'Player', function ($scope, Pla
     });
 }]);
 
-app.controller('Mp3playerTracksCtrl', ['$scope', 'Player', function ($scope, Player) {
+app.controller('Mp3playerTracksCtrl', ['$scope', 'Track', 'Player', function ($scope, Track, Player) {
     var curTrackMenu = null;
     $scope.trackMenuItems = [
         {
             'label': '收藏',
             active: false,
             select: function(item, items, index){
-                item.active = !item.active;
-                curTrackMenu.save = item.active;
+                Track.save(curTrackMenu, !item.active)
+                    .success(function(){
+                        item.active = !item.active;
+                        curTrackMenu.save = item.active;
+                    });
             }
         },
         {
@@ -265,7 +268,7 @@ app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Track', 'Player'
     $scope.playMusic = function(song){
         //检查歌曲是否存在
         for(var i = $scope.tracks.length - 1; i > 0; i--){
-            if($scope.tracks[i].songid == song.songid){
+            if($scope.tracks[i].songid == song.songid || ($scope.tracks[i].artist == song.artistname && $scope.tracks[i].title == song.songname)){
                 return;
             }
         }

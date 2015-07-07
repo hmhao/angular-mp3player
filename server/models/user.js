@@ -1,9 +1,38 @@
 var bcrypt = require('bcrypt-nodejs'),
     mongoose = require('../db/mongodb'),
+    Schema = mongoose.Schema,
     BCRYPT_WORK_FACTOR = 10;
 
+var TrackSchema = new Schema({
+    url: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    artist: {
+        type: String,
+        required: true
+    },
+    genre: {
+        type: String,
+        required: true
+    },
+    album: {
+        type: String,
+        required: true
+    },
+    lrc: {
+        type: String,
+        default : ''
+    }
+});
+
 // User schema
-var UserSchema = new mongoose.Schema({
+var UserSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -25,41 +54,13 @@ var UserSchema = new mongoose.Schema({
     },
     twitter: {
         type: String,
-        required: false,
-        unique: true
+        required: false
     },
     facebook: {
         type: String,
-        required: false,
-        unique: true
+        required: false
     },
-    tracks: [{
-        url: {
-            type: String,
-            required: true,
-            unique: true
-        },
-        title: {
-            type: String,
-            required: true
-        },
-        artist: {
-            type: String,
-            required: true
-        },
-        genre: {
-            type: String,
-            required: true
-        },
-        album: {
-            type: String,
-            required: true
-        },
-        lrc: {
-            type: String,
-            required: true
-        }
-    }]
+    tracks: [TrackSchema]
 });
 
 // Bcrypt middleware
