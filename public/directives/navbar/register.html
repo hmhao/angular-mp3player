@@ -1,26 +1,29 @@
 <div class="modal-dialog">
     <div class="modal-content">
-        <form name="registerForm" role="register" ng-submit="registerFn()" >
+        <form name="registerForm" role="register" ng-submit="registerFn()" novalidate>
             <div class="modal-header">注册</div>
             <div class="modal-body">
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': registerForm.name.$invalid && !registerForm.name.$pristine}">
                     <label for="name">用户名</label>
-                    <input id="name" name="name" ng-model="register.username" type="text" class="form-control" placeholder="Username">
+                    <input id="name" name="name" ng-model="register.username" type="text" class="form-control" placeholder="Username" required>
+                    <p ng-show="registerForm.name.$invalid && !registerForm.name.$pristine" class="help-block">Username is required.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error' : registerForm.email.$invalid && !registerForm.email.$pristine}">
                     <label for="email">邮箱</label>
-                    <input id="email" name="email" ng-model="register.email" type="text" class="form-control" placeholder="Email">
+                    <input id="email" name="email" ng-model="register.email" type="email" class="form-control" placeholder="Email" required>
+                    <p ng-show="registerForm.email.$invalid && !registerForm.email.$pristine" class="help-block">Enter a valid email.</p>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{'has-error': registerForm.password.$invalid && !registerForm.password.$pristine}">
                     <label for="password">密码</label>
-                    <input id="password" name="password" ng-model="register.password" type="password" class="form-control" placeholder="Password">
+                    <input id="password" name="password" ng-model="register.password" type="password" class="form-control" placeholder="Password" required>
+                    <p ng-show="registerForm.password.$invalid && !registerForm.password.$pristine" class="help-block">Password is required.</p>
                 </div>
             </div>
             <div class="modal-footer">
                 <div class="alert alert-success text-center" role="alert" ng-show="state.isSuccess">{{state.success}}</div>
                 <div class="alert alert-danger text-center" role="alert" ng-show="state.isError">{{state.error}}</div>
                 <button type="button" data-dismiss="modal" class="btn btn-default">关闭</button>
-                <button type="submit" class="btn btn-success" ng-disabled="state.isSubmit">提交</button>
+                <button type="submit" class="btn btn-success" ng-disabled="registerForm.$invalid || state.isSubmit">提交</button>
             </div>
         </form>
     </div>

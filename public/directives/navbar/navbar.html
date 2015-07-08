@@ -2,14 +2,14 @@
     <div class="navbar-collapse">
         <!-- Right side of the navbar -->
         <!-- Login Form -->
-        <form class="navbar-form navbar-right" name="loginForm" role="login" ng-submit="loginFn()" ng-hide="user.isLogged">
+        <form class="navbar-form navbar-right" name="loginForm" role="login" ng-submit="loginFn()" ng-hide="user.isLogged" novalidate>
             <div class="form-group">
-                <input type="text" class="form-control" ng-model="login.username" name="username" placeholder="Username">
+                <input type="text" class="form-control" ng-model="login.username" name="username" placeholder="Username" required>
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" ng-model="login.password" name="password" placeholder="Password">
+                <input type="password" class="form-control" ng-model="login.password" name="password" placeholder="Password" required>
             </div>
-            <button type="submit" class="btn btn-primary" >登录</button>
+            <button type="submit" class="btn btn-primary"  ng-disabled="loginForm.$invalid">登录</button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signupModal">注册</button>
         </form>
         <!-- Logout Form -->

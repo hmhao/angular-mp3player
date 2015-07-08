@@ -6,8 +6,7 @@ var bcrypt = require('bcrypt-nodejs'),
 var TrackSchema = new Schema({
     url: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     title: {
         type: String,

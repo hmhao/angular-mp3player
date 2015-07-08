@@ -12,7 +12,7 @@ router.get('/', function (req, res) {
 router.get('/lrc', mp3player.lrc);
 router.get('/media', mp3player.media);
 router.post('/upload', mp3player.upload);
-router.post('/save', mp3player.save);
+router.post('/save', user.ensureAuthenticated, mp3player.save);
 
 //user相关
 router.post('/register', user.register);

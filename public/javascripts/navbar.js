@@ -17,6 +17,24 @@ app.factory('$session', function () {
     };
 });
 
+app.service('User', [function(){
+    this.isLogged = false;
+    this.username = '';
+    this.email = '';
+
+    this.set = function(data){
+        this.isLogged = data.isLogged || false;
+        this.username = data.username || '';
+        this.email = data.email || '';
+    };
+
+    this.reset = function(){
+        this.isLogged = false;
+        this.username = '';
+        this.email = '';
+    };
+}]);
+
 app.service('AuthenticationService', ['$http', '$timeout', '$q', '$session', function ($http, $timeout, $q, $session) {
     this.login = function (credentials) {
         var login = $http.post('/login', credentials);
@@ -57,15 +75,11 @@ app.service('AuthenticationService', ['$http', '$timeout', '$q', '$session', fun
     };
 }]);
 
-app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', function ($scope, $timeout, AuthenticationService) {
-    $scope.user = {
-        isLogged: false,
-        username: '',
-        email: ''
-    };
+app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', 'User', function ($scope, $timeout, AuthenticationService, User) {
+    $scope.user = User;
     $scope.login = {
-        username: 'a',
-        password: 'a'
+        username: '',
+        password: ''
     };
     $scope.loginFn = function () {
         console.log('start login');
@@ -81,9 +95,9 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
         console.log('logout');
         AuthenticationService.logout()
             .success(function(data){
-                $scope.user.isLogged = false;
-                $scope.user.username = '';
-                $scope.user.email = '';
+                User.reset();
+                $scope.login.username = '';
+                $scope.login.password = '';
                 $scope.$emit('user_logouted');
             });
 
@@ -100,9 +114,11 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', fun
         });
 
     function onUserLogined(user){
-        $scope.user.isLogged = true;
-        $scope.user.username = user.username;
-        $scope.user.email = user.email;
+        User.set({
+            isLogged: true,
+            username: user.username,
+            email: user.email
+        });
         $scope.$emit('user_logined', user);
     }
 }]);
@@ -153,7 +169,13 @@ app.directive('navbar', function () {
         controller: 'NavbarCtrl',
         replace: true,
         link: function (scope, element, attrs) {
-
+            scope.$on('user_unauthorized', function(event){
+                if(!scope.login.username){
+                    element.find('form input[name="username"]').focus();
+                }else if(!scope.login.password){
+                    element.find('form input[name="password"]').focus();
+                }
+            });
         }
     }
 });
@@ -171,7 +193,7 @@ app.directive('register', function () {
             element.on('show.bs.modal', function (e) {
                 scope.resetState();
                 scope.$apply();
-            })
+            });
         }
     }
 });

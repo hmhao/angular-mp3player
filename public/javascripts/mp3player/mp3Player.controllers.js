@@ -203,9 +203,13 @@ app.controller('Mp3playerTracksCtrl', ['$scope', 'Track', 'Player', function ($s
             active: false,
             select: function(item, items, index){
                 Track.save(curTrackMenu, !item.active)
-                    .success(function(){
+                    .success(function(data){
                         item.active = !item.active;
                         curTrackMenu.save = item.active;
+                    }).error(function(err){
+                        if(err == 'Unauthorized'){
+                            $scope.$emit('user_unauthorized');
+                        }
                     });
             }
         },
