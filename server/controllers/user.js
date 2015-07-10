@@ -43,15 +43,11 @@ exports.ensureAuthenticated = function(req, res, next) {
 };
 
 // Check for admin middleware, this is unrelated to passport.js
-// You can delete this if you use different method to check for admins or don't need admins
 exports.ensureAdmin = function (req, res, next) {
-    return function(req, res, next) {
-        console.log(req.user);
-        if(req.user && req.user.admin === true)
-            next();
-        else
-            res.send(403);
-    }
+    if(req.user && req.user.admin === true)
+        next();
+    else
+        res.redirect('/admin');
 };
 
 exports.createUUID = function () {

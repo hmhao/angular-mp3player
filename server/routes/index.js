@@ -1,12 +1,24 @@
 var express = require('express'),
     mp3player = require('../controllers/mp3player'),
-    user = require('../controllers/user');
+    user = require('../controllers/user'),
+    admin = require('../controllers/admin');
 
 var router = express.Router();
 router.get('/', function (req, res) {
     var app = require('../../app');
     res.render('index', {title: app.get('appName')});
 });
+
+router.get('/admin', function (req, res) {
+    var app = require('../../app'),
+        data = {
+            title: app.get('appName'),
+            admin: req.isAuthenticated() && req.user && req.user.admin === true
+        };
+    res.render('admin', data);
+});
+router.post('/admin/login', admin.login);
+router.get('/admin/userlist', user.ensureAuthenticated, user.ensureAdmin, admin.userlist);
 
 //mp3player相关
 router.get('/lrc', mp3player.lrc);

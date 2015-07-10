@@ -1,0 +1,11 @@
+<div ng-controller="AdminCtrl" id="app">
+    <div ng-show="checkIfOwnPage()">
+        <aside ng-include="'/views/admin/navigation.html'" id="nav-container"></aside>
+    </div>
+    <div class="view-container">
+        <div ng-show="checkIfOwnPage()" data-ng-cloak="">
+            <section ng-include="'/views/admin/header.html'" id="header" class="top-header"></section>
+        </div>
+        <section ui-view="content" id="content"></section>
+    </div>
+</div>
