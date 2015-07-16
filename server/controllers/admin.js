@@ -18,6 +18,7 @@ exports.login = function (req, res, next) {
         });
     })(req, res, next);
 };
+
 exports.userlist = function(req, res, next) {
     var criteria = {admin: false},
         fields = {
@@ -34,6 +35,7 @@ exports.userlist = function(req, res, next) {
         res.json(result);
     });
 };
+
 exports.hotartist = function(req, res, next) {
     AnalyticsCount.findHotArtist(function(err, result) {
         if (err) { return next(err); }
@@ -41,7 +43,6 @@ exports.hotartist = function(req, res, next) {
         res.json(result);
     });
 };
-
 exports.hotartist_rate_date = function(req, res, next) {
     AnalyticsCount.findHotArtistRateByDate(function(err, result) {
         if (err) { return next(err); }
@@ -57,7 +58,6 @@ exports.hotsong = function(req, res, next) {
         res.json(result);
     });
 };
-
 exports.hotsong_rate_date = function(req, res, next) {
     AnalyticsCount.findHotSongRateByDate(function(err, result) {
         if (err) { return next(err); }

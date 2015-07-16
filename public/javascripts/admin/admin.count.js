@@ -4,27 +4,10 @@ app.controller('CountCtrl', ['$scope', '$http', function ($scope, $http) {
     $scope.tables = {
         hot_artist: {
             title: '歌手热播',
-            head: [{
-                key: 'index',
-                value: '#'
-            }, {
-                key: 'artist',
-                value: '歌手'
-            }],
             data: []
         },
         hot_song: {
             title: '歌曲热播',
-            head: [{
-                key: 'index',
-                value: '#'
-            }, {
-                key: 'song',
-                value: '歌曲'
-            },{
-                key: 'artist',
-                value: '歌手'
-            }],
             data: []
         }
     };

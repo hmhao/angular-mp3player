@@ -1,10 +1,10 @@
 var app = angular.module('admin.login', ['ui.router']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/');
+    $urlRouterProvider.otherwise('');
     $stateProvider
         .state('#', {
-            url: '/',
+            url: '',
             templateUrl: '/views/admin/admin-login.html',
             controller: 'LoginCtrl'
         });

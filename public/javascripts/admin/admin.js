@@ -28,12 +28,18 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         })
 }]);
 
-app.controller('AdminCtrl', ['$scope', '$location', function ($scope, $location) {
+app.controller('AdminCtrl', ['$scope', '$location', '$http', '$window', function ($scope, $location, $http, $window) {
+    var path = $location.path();
     $scope.checkIfOwnPage = function () {
         return [
             '/404'
         ].indexOf($location.path()) == -1;
     };
+    $scope.logout = function(){
+        $http.get('/logout').success(function () {
+            $window.location = $window.location.origin + $window.location.pathname;
+        });
+    }
 }]);
 
 app.controller('NavCtrl', ['$scope', function($scope) {
