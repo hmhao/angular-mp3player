@@ -1,4 +1,4 @@
-var app = angular.module('admin-login', ['ui.router']);
+var app = angular.module('admin.login', ['ui.router']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');

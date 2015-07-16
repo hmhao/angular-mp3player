@@ -1,5 +1,6 @@
 var request = require('request'),
-    User = require('../models/user');
+    User = require('../models/user'),
+    AnalyticsCount = require('../models/count');
 
 exports.lrc = function ($req, $res) {
     var url = $req.query.url || '';
@@ -58,4 +59,20 @@ exports.save = function(req, res, next) {
             res.json({status:200, id:track._id});
         });
     }
+};
+
+exports.count = function(req, res, next) {
+    var type = req.body.type,
+        data = req.body.data,
+        uid = req.user ? req.user._id : '',
+        analyticsCount = new AnalyticsCount({
+            type: type,
+            data: data,
+            uid: uid
+        });
+
+    analyticsCount.save(function(err, result){
+        if (err) { return next(err); }
+        else res.send();
+    })
 };

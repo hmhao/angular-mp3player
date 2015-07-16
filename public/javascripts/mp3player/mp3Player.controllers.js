@@ -249,7 +249,9 @@ app.controller('Mp3playerLyricsCtrl', ['$scope', 'Lyrics', function ($scope, Lyr
     }
 }]);
 
-app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Track', 'Player', function ($scope, BaiduMusic, Track, Player) {
+app.controller('Mp3playerSearchCtrl',
+    ['$scope', 'BaiduMusic', 'Track', 'Player', 'AnalyticsCount',
+        function ($scope, BaiduMusic, Track, Player, AnalyticsCount) {
     $scope.searchEngine = {
         engines: ['百度', '网易', '腾讯'],
         current: 0
@@ -294,5 +296,7 @@ app.controller('Mp3playerSearchCtrl', ['$scope', 'BaiduMusic', 'Track', 'Player'
                 Player.add(track[0]);
             }
         });
+
+        AnalyticsCount.count('PlaySearch', {artist: song.artistname, song: song.songname});
     }
 }]);

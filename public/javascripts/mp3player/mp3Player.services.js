@@ -302,3 +302,13 @@ app.service('BaiduMusic', ['$http', function ($http) {
         getData: self.getData
     };
 }]);
+
+app.service('AnalyticsCount', ['$http', function ($http) {
+    this.count = function(type, data){
+        var params = {
+            type: type,
+            data: data
+        };
+        $http.post('/count', params);
+    }
+}]);

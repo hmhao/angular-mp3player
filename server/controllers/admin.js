@@ -1,4 +1,5 @@
 var User = require('../models/user'),
+    AnalyticsCount = require('../models/count'),
     passport = require('./user');
 
 exports.login = function (req, res, next) {
@@ -30,6 +31,29 @@ exports.userlist = function(req, res, next) {
         if (user) {
             result = result.concat(user);
         }
+        res.json(result);
+    });
+};
+exports.hotartist = function(req, res, next) {
+    AnalyticsCount.findHotArtist(function(err, result) {
+        if (err) { return next(err); }
+        if(!result){ result = [] }
+        res.json(result);
+    });
+};
+
+exports.hotsong = function(req, res, next) {
+    AnalyticsCount.findHotSong(function(err, result) {
+        if (err) { return next(err); }
+        if(!result){ result = [] }
+        res.json(result);
+    });
+};
+
+exports.hotsong_rate_date = function(req, res, next) {
+    AnalyticsCount.findHotSongRateByDate(function(err, result) {
+        if (err) { return next(err); }
+        if(!result){ result = [] }
         res.json(result);
     });
 };

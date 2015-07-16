@@ -124,10 +124,24 @@ app.controller('NavbarCtrl', ['$scope', '$timeout', 'AuthenticationService', 'Us
 }]);
 
 app.controller('RegisterCtrl', ['$scope', '$timeout', 'AuthenticationService', function ($scope, $timeout, AuthenticationService) {
+    function randomString(length) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
+
+        if (! length) {
+            length = Math.floor(Math.random() * chars.length);
+        }
+
+        var str = '';
+        for (var i = 0; i < length; i++) {
+            str += chars[Math.floor(Math.random() * chars.length)];
+        }
+        return str;
+    }
+    var random = randomString(8);
     $scope.register = {
-        username: 'a',
-        email: 'a@163.com',
-        password: 'a'
+        username: random,
+        email: random + '@163.com',
+        password: random
     };
     $scope.state = {
         isSubmit: false,

@@ -17,14 +17,19 @@ router.get('/admin', function (req, res) {
         };
     res.render('admin', data);
 });
+//router.get('/admin/*', user.ensureAuthenticated, user.ensureAdmin);
 router.post('/admin/login', admin.login);
-router.get('/admin/userlist', user.ensureAuthenticated, user.ensureAdmin, admin.userlist);
+router.get('/admin/userlist', admin.userlist);
+router.get('/admin/hotartist', admin.hotartist);
+router.get('/admin/hotsong', admin.hotsong);
+router.get('/admin/hotsong_rate_date', admin.hotsong_rate_date);
 
 //mp3player相关
 router.get('/lrc', mp3player.lrc);
 router.get('/media', mp3player.media);
 router.post('/upload', mp3player.upload);
 router.post('/save', user.ensureAuthenticated, mp3player.save);
+router.post('/count', mp3player.count);
 
 //user相关
 router.post('/register', user.register);

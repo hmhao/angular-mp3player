@@ -13,7 +13,7 @@
     <!-- endbower -->
     <link rel='stylesheet' href='/stylesheets/admin.css'/>
 </head>
-<body ng-app="admin<% if (!admin) { %>-login<% } %>">
+<body ng-app="admin<% if (!admin) { %>.login<% } %>">
 <div ui-view></div>
 <!-- bower:js -->
 <script src="/libs/jquery/dist/jquery.js"></script>
@@ -27,8 +27,9 @@
 
 <script src="/javascripts/admin/admin.js"></script>
 <script src="/javascripts/admin/admin.directives.js"></script>
+<script src="/javascripts/admin/admin.userlist.js"></script>
 <% } else { %>
-<script src="/javascripts/admin/admin-login.js"></script>
+<script src="/javascripts/admin/admin.login.js"></script>
 <% } %>
 </body>
 </html>
