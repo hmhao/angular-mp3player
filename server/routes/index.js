@@ -21,6 +21,7 @@ router.get('/admin', function (req, res) {
 router.post('/admin/login', admin.login);
 router.get('/admin/userlist', admin.userlist);
 router.get('/admin/hotartist', admin.hotartist);
+router.get('/admin/hotartist_rate_date', admin.hotartist_rate_date);
 router.get('/admin/hotsong', admin.hotsong);
 router.get('/admin/hotsong_rate_date', admin.hotsong_rate_date);
 

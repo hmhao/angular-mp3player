@@ -42,6 +42,14 @@ exports.hotartist = function(req, res, next) {
     });
 };
 
+exports.hotartist_rate_date = function(req, res, next) {
+    AnalyticsCount.findHotArtistRateByDate(function(err, result) {
+        if (err) { return next(err); }
+        if(!result){ result = [] }
+        res.json(result);
+    });
+};
+
 exports.hotsong = function(req, res, next) {
     AnalyticsCount.findHotSong(function(err, result) {
         if (err) { return next(err); }

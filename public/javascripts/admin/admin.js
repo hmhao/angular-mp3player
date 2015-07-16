@@ -1,4 +1,4 @@
-var app = angular.module('admin', ['ui.bootstrap','ui.router','admin.directives', 'admin.userlist']);
+var app = angular.module('admin', ['ui.bootstrap','ui.router','admin.directives', 'admin.userlist','admin.count']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('');
