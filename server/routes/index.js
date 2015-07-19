@@ -24,6 +24,8 @@ router.get('/admin/hotartist', admin.hotartist);
 router.get('/admin/hotartist_rate_date', admin.hotartist_rate_date);
 router.get('/admin/hotsong', admin.hotsong);
 router.get('/admin/hotsong_rate_date', admin.hotsong_rate_date);
+router.get('/admin/comment', admin.get_comment);
+router.post('/admin/comment', admin.post_comment);
 
 //mp3player相关
 router.get('/lrc', mp3player.lrc);

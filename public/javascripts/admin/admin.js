@@ -1,4 +1,5 @@
-var app = angular.module('admin', ['ui.bootstrap','ui.router','admin.directives', 'admin.userlist','admin.count']);
+var app = angular.module('admin', ['ui.bootstrap','ui.router',
+    'admin.directives', 'admin.userlist','admin.count', 'admin.comment']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('');
@@ -23,6 +24,25 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             views: {
                 'content@#': {
                     templateUrl: '/views/admin/count/index.html'
+                }
+            }
+        })
+        .state('#.music',{
+            url: '/music'
+        })
+        .state('#.music.artist',{
+            url: '/artist',
+            views: {
+                'content@#': {
+                    templateUrl: '/views/admin/music/artist.html'
+                }
+            }
+        })
+        .state('#.music.song',{
+            url: '/song',
+            views: {
+                'content@#': {
+                    templateUrl: '/views/admin/music/song.html'
                 }
             }
         })

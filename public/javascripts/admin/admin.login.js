@@ -9,6 +9,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'LoginCtrl'
         });
 });
+app.run(function($rootScope, $window){
+    $rootScope.$on('$locationChangeSuccess',function(event, next, nextParams){
+        if($window.location.href.indexOf('#') != -1){
+            $window.location = $window.location.origin + $window.location.pathname;
+        }
+    });
+});
 app.controller('LoginCtrl', ['$scope', '$http', '$window', function ($scope, $http, $window) {
     $scope.login = {
         username: '',

@@ -1,5 +1,6 @@
 var User = require('../models/user'),
     AnalyticsCount = require('../models/count'),
+    Comment = require('../models/comment'),
     passport = require('./user');
 
 exports.login = function (req, res, next) {
@@ -64,4 +65,32 @@ exports.hotsong_rate_date = function(req, res, next) {
         if(!result){ result = [] }
         res.json(result);
     });
+};
+
+
+exports.get_comment = function(req, res, next) {
+    Comment.findAll(function(err, result) {
+        if (err) {next(err)}
+        res.json(result);
+    });
+};
+exports.post_comment = function(req, res, next) {
+    var comment = req.body.comment;
+    if (comment.cid) {
+        var reply = {
+            from: comment.tid,
+            to: req.user._id,
+            content: comment.content
+        };
+        Comment.findByIdAndPush(comment.cid, reply, function(err, result) {
+            if (err) {next(err)}
+            res.json(result);
+        });
+    }else {
+        comment.from = req.user._id;
+        Comment.save(new Comment(comment), function(err, result) {
+            if (err) {next(err)}
+            res.json(result);
+        });
+    }
 };
