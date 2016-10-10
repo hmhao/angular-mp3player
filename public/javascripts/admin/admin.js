@@ -31,7 +31,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/music'
         })
         .state('#.music.artist',{
-            url: '/artist',
+            url: '/artist/{artistId:[0-9]}',
             views: {
                 'content@#': {
                     templateUrl: '/views/admin/music/artist.html'
